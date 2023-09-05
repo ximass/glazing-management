@@ -3,17 +3,14 @@
   "description": "Most Powerful & Comprehensive Free MUI React NextJS Admin Dashboard Template built for developers! 🚀",
   "license": "MIT",
   "version": "1.0.0",
-  "author": {
-    "name": "ThemeSelection",
-    "url": "https://themeselection.com/"
-  },
+  "author": "ThemeSelection (https://themeselection.com/)",
   "bugs": {
     "url": "https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/issues"
   },
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free.git"
+    "url": "git+https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free.git"
   },
   "homepage": "https://themeselection.com/products/materio-free-mui-react-nextjs-admin-template/",
   "keywords": [
@@ -51,6 +48,7 @@
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.3",
     "@popperjs/core": "^2.11.2",
+    "@prisma/client": "^5.2.0",
     "apexcharts-clevision": "3.28.5",
     "clsx": "^1.1.1",
     "mdi-material-ui": "^7.1.0",
@@ -64,7 +62,7 @@
     "react-popper": "^2.2.5"
   },
   "devDependencies": {
-    "@types/node": "16.11.11",
+    "@types/node": "^16.11.11",
     "@types/nprogress": "^0.2.0",
     "@types/react": "17.0.37",
     "@types/react-datepicker": "^4.3.2",
@@ -78,6 +76,12 @@
     "eslint-plugin-import": "^2.25.4",
     "next-transpile-modules": "^9.0.0",
     "prettier": "2.5.1",
-    "typescript": "4.5.2"
+    "prisma": "^5.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.5.2"
+  },
+  "main": ".prettierrc.js",
+  "directories": {
+    "lib": "lib"
   }
 }

@@ -1,0 +1,96 @@
+## Usuários
+
+model users {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    name      String?
+    login     String   @unique
+    password  String
+    avatar    String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model users_groups{
+    id          Int      @id @default(autoincrement())
+    user        users     @relation(fields: [user_id], references: [id])
+    user_id     Int
+    groups_id   groups[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model groups {
+    id      Int      @id @default(autoincrement())
+    name    String
+    level   Int
+    .
+    .
+    .
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model groups_permissions {
+    id          Int      @id @default(autoincrement())
+    group       group     @relation(fields: [user_id], references: [id])
+    group_id    Int
+    permissions permissions[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model permissions{
+    id        Int      @id @default(autoincrement())
+    screen    String
+    .
+    .
+    .
+    .
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#######SAMPLE################
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+  content   String?
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+}
+
+model Profile {
+  id     Int     @id @default(autoincrement())
+  bio    String?
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int     @unique
+}
+
+model User {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String?
+  posts   Post[]
+  profile Profile?
+}
+
