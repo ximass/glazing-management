@@ -15,24 +15,12 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
 
-const names = [
-  "Humaira Sims",
-  "Santiago Solis",
-  "Dawid Floyd",
-  "Mateo Barlow",
-  "Samia Navarro",
-  "Kaden Fields",
-  "Genevieve Watkins",
-  "Mariah Hickman",
-  "Rocco Richardson",
-  "Harris Glenn"
-];
+const FormGroups = (props) => {
 
-const FormGroups = () => {
+  const [permissionsSelect, setPermission] = useState<string[]>([]);
 
-  const [language, setLanguage] = useState<string[]>([])
   const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
-    setLanguage(event.target.value as string[])
+    setPermission(event.target.value as string[])
   }
 
   return (
@@ -46,17 +34,17 @@ const FormGroups = () => {
             </Grid>
             <Grid item xs={6}>
               <FormControl fullWidth>
-                <InputLabel id='form-layouts-separator-multiple-select-label'>Language</InputLabel>
+                <InputLabel id='form-layouts-separator-multiple-select-label'>Permissões</InputLabel>
                 <Select
                   multiple
-                  value={language}
+                  value={props.permissionsGroup}
                   onChange={handleSelectChange}
                   id='form-layouts-separator-multiple-select'
                   labelId='form-layouts-separator-multiple-select-label'
-                  input={<OutlinedInput label='Language' id='select-multiple-language' />}
+                  input={<OutlinedInput label='Permissões' id='permissions' />}
                 >
                   {
-                    names.map((name) => (
+                    props.permissions.map((name) => (
                       <MenuItem key={name} value={name}>
                         {name}
                       </MenuItem>

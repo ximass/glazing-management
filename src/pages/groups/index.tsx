@@ -10,12 +10,40 @@ import FormGroups from 'src/views/form-layouts/FormGroups'
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 
-const FormLayouts = () => {
+import { GetServerSideProps } from 'next/types';
+//import prisma from 'lib/prisma';
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const permissions = [
+    "Humaira Sims",
+    "Santiago Solis",
+    "Dawid Floyd",
+    "Mateo Barlow",
+    "Samia Navarro",
+    "Kaden Fields",
+    "Genevieve Watkins",
+    "Mariah Hickman",
+    "Rocco Richardson",
+    "Harris Glenn"
+  ];
+
+  const permissionsGroup = [
+    "Humaira Sims",
+    "Santiago Solis",
+    "Dawid Floyd"
+  ];
+
+  return {
+    props: { permissions, permissionsGroup },
+  };
+};
+
+const FormLayouts = (props) => {
   return (
     <DatePickerWrapper>
       <Grid container >
         <Grid item xs={12}>
-          <FormGroups />
+          <FormGroups permissions={props.permissions} permissionsGroup={props.permissionsGroup}/>
         </Grid>
       </Grid>
     </DatePickerWrapper>
