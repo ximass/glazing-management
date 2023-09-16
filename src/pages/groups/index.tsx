@@ -1,53 +1,23 @@
 // ** MUI Imports
-import Grid from '@mui/material/Grid'
-
-// ** Styled Component
-import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
+import CardHeader from '@mui/material/CardHeader';
 
 // ** Demo Components Imports
-import FormGroups from 'src/views/form-layouts/FormGroups'
+import TableStickyHeader from 'src/views/defaults/tables/TableStickyHeader';
 
-// ** Third Party Styles Imports
-import 'react-datepicker/dist/react-datepicker.css'
-
-import { GetServerSideProps } from 'next/types';
-//import prisma from 'lib/prisma';
-
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const permissions = [
-    "Humaira Sims",
-    "Santiago Solis",
-    "Dawid Floyd",
-    "Mateo Barlow",
-    "Samia Navarro",
-    "Kaden Fields",
-    "Genevieve Watkins",
-    "Mariah Hickman",
-    "Rocco Richardson",
-    "Harris Glenn"
-  ];
-
-  const permissionsGroup = [
-    "Humaira Sims",
-    "Santiago Solis",
-    "Dawid Floyd"
-  ];
-
-  return {
-    props: { permissions, permissionsGroup },
-  };
-};
-
-const FormLayouts = (props) => {
+const GroupList = () => {
   return (
-    <DatePickerWrapper>
-      <Grid container >
-        <Grid item xs={12}>
-          <FormGroups permissions={props.permissions} permissionsGroup={props.permissionsGroup}/>
-        </Grid>
+    <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <Card>
+          <CardHeader title='Grupos' titleTypographyProps={{ variant: 'h6' }} />
+          <TableStickyHeader />
+        </Card>
       </Grid>
-    </DatePickerWrapper>
+    </Grid>
   )
 }
 
-export default FormLayouts
+export default GroupList
