@@ -15,7 +15,12 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
 
-const FormGroups = (props) => {
+type Props = {
+  permissions: string[];
+  permissionsGroup: string[];
+}
+
+const FormGroups: React.FC<Props> = (props) => {
 
   const [permissionsSelect, setPermission] = useState<string[]>([]);
 
