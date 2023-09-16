@@ -11,9 +11,10 @@ import FormGroups from 'src/views/groups/Form'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import { GetServerSideProps } from 'next/types';
+
 //import prisma from 'lib/prisma';
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const permissions = [
     "Humaira Sims",
     "Santiago Solis",

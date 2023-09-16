@@ -1,7 +1,6 @@
 // ** MUI Imports
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
-import Typography from '@mui/material/Typography';
 import CardHeader from '@mui/material/CardHeader';
 
 // ** Demo Components Imports
