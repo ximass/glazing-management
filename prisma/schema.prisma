@@ -9,3 +9,22 @@ datasource db {
   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
+
+// ===========================GROUPS=============================
+
+model Group {
+    id          Int             @id @default(autoincrement())
+    name        String
+    level       Int
+    permissions Permission[]
+    createdAt   DateTime        @default(now())
+    updatedAt   DateTime        @updatedAt
+}
+
+model Permission {
+    id          Int             @id @default(autoincrement())
+    name        String
+    groups      Group[]
+    createdAt   DateTime        @default(now())
+    updatedAt   DateTime        @updatedAt
+}
