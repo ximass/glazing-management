@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 // ** Demo Components Imports
-import FormGroups from 'src/views/groups/Form'
+import FormGroups from 'src/views/users/Form'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'

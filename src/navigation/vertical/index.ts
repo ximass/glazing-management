@@ -20,13 +20,13 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Grupos',
       icon: AccountGroup,
       path: '/groups',
-      openInNewTab: true
+      openInNewTab: false
     },
     {
       title: 'Permissões',
       icon: AccountMultiplePlus,
       path: '/permissions',
-      openInNewTab: true
+      openInNewTab: false
     },
   ]
 }

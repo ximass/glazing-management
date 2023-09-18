@@ -12,7 +12,12 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import { GetServerSideProps } from 'next/types';
 
-//import prisma from 'lib/prisma';
+import React from 'react';
+import Router from 'next/router';
+
+//import { useSession } from 'next-auth/react';
+import prisma from 'lib/prisma';
+
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const permissions = [
@@ -28,10 +33,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
     "Harris Glenn"
   ];
 
-  const permissionsGroup: string[] = [];
+  const permissionsGroup = [
+    "Humaira Sims",
+    "Santiago Solis",
+    "Dawid Floyd"
+  ];
 
   return {
-    props: { permissions, permissionsGroup }
+    props: { permissions, permissionsGroup },
   };
 };
 
