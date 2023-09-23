@@ -1,25 +1,40 @@
-// ** MUI Imports
-import Grid from '@mui/material/Grid'
+import { GetServerSideProps } from 'next/types';
+import prisma from 'lib/prisma';
 
-// ** Styled Component
-import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+// ** MUI Imports
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
 
 // ** Demo Components Imports
-import FormPermission from 'src/views/defaults/form-layouts/FormPermission'
+import TableStickyHeader from 'src/views/permissions/List';
+import { Permission } from '@prisma/client';
 
-// ** Third Party Styles Imports
-import 'react-datepicker/dist/react-datepicker.css'
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const permissions = await prisma.permission.findMany();
 
-const FormLayouts = () => {
+  return {
+    props: { 
+      permissions : JSON.parse(JSON.stringify(permissions))
+    }
+  };
+};
+
+type Props = {
+  permissions: Permission[];
+};
+
+const GroupList: React.FC<Props> = (props) => {
   return (
-    <DatePickerWrapper>
-      <Grid container >
-        <Grid item xs={12}>
-          <FormPermission />
-        </Grid>
+    <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <Card>
+          <CardHeader title='Permissões' titleTypographyProps={{ variant: 'h6' }} />
+          <TableStickyHeader permissions={props.permissions}/>
+        </Card>
       </Grid>
-    </DatePickerWrapper>
+    </Grid>
   )
 }
 
-export default FormLayouts
+export default GroupList
