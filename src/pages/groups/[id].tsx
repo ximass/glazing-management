@@ -14,10 +14,7 @@ import { GetServerSideProps } from 'next/types';
 
 import React from 'react';
 
-import Router from 'next/router';
-
 //import { useSession } from 'next-auth/react';
-import prisma from 'lib/prisma';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const permissions = [
