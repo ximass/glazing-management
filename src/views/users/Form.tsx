@@ -15,19 +15,17 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 
 // ** Icons Imports
-import Phone from 'mdi-material-ui/Phone'
 import EmailOutline from 'mdi-material-ui/EmailOutline'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
-import MessageOutline from 'mdi-material-ui/MessageOutline'
-import { Group } from '@prisma/client'
+import { Group, User } from '@prisma/client'
 
 type Props = {
-  user: User;
+  user: User | undefined;
   groups: Group[];
+  userGroups: number[];
 }
 
-const FormUsers: React.FC<Props> = (props) => {
-
+const UserForm: React.FC<Props> = (props) => {
   const [permissionsSelect, setGroups] = useState<string[]>([]);
 
   const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
@@ -36,12 +34,13 @@ const FormUsers: React.FC<Props> = (props) => {
 
   return (
     <Card>
-      <CardHeader title='Usuários' titleTypographyProps={{ variant: 'h6' }} />
+      <CardHeader title='Usuário' titleTypographyProps={{ variant: 'h6' }} />
       <CardContent>
         <form onSubmit={e => e.preventDefault()}>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <TextField
+                value={props.user ? props.user.name : ''}
                 fullWidth
                 label='Nome'
                 placeholder='Fulano'
@@ -56,6 +55,7 @@ const FormUsers: React.FC<Props> = (props) => {
             </Grid>
             <Grid item xs={4}>
               <TextField
+                value={props.user ? props.user.email : ''}
                 fullWidth
                 type='email'
                 label='Email'
@@ -71,6 +71,7 @@ const FormUsers: React.FC<Props> = (props) => {
             </Grid>
             <Grid item xs={4}>
               <TextField
+                value={props.user ? props.user.login : ''}
                 fullWidth
                 label='Login'
                 placeholder='fulano'
@@ -88,7 +89,7 @@ const FormUsers: React.FC<Props> = (props) => {
                 <InputLabel htmlFor='form-layouts-basic-password'>Senha</InputLabel>
                 <OutlinedInput
                   label='Password'
-                  value={props.user.password}
+                  value={props.user ? props.user.password : ''}
                   id='form-layouts-basic-password'
                   type='password'
                   aria-describedby='form-layouts-basic-password-helper'
@@ -97,19 +98,19 @@ const FormUsers: React.FC<Props> = (props) => {
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel id='form-layouts-separator-multiple-select-label'>Permissões</InputLabel>
+                <InputLabel id='form-layouts-separator-multiple-select-label'>Grupos</InputLabel>
                 <Select
                   multiple
-                  value={props.user.permissions.map((permission) => permission.id)}
+                  value={props.user ? props.userGroups.map(group => group.toString()) : ''}
                   onChange={handleSelectChange}
                   id='form-layouts-separator-multiple-select'
                   labelId='form-layouts-separator-multiple-select-label'
-                  input={<OutlinedInput label='Permissões' id='permissions' />}
+                  input={<OutlinedInput label='Permissões' id='groups' />}
                 >
                   {
-                    props.permissions.map((permission) => (
-                      <MenuItem key={permission.id} value={permission.id}>
-                        {permission.name}
+                    props.groups.map((group) => (
+                      <MenuItem key={group.id} value={group.id}>
+                        {group.name}
                       </MenuItem>
                     ))
                   }
@@ -128,4 +129,4 @@ const FormUsers: React.FC<Props> = (props) => {
   )
 }
 
-export default FormUsers
+export default UserForm

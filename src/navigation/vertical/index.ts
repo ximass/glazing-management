@@ -14,7 +14,13 @@ const navigation = (): VerticalNavItemsType => {
       path: '/'
     },
     {
-      sectionTitle: 'Pages'
+      sectionTitle: 'Cadastros'
+    },
+    {
+      title: 'Usuários',
+      icon: AccountMultiplePlus,
+      path: '/users',
+      openInNewTab: false
     },
     {
       title: 'Grupos',

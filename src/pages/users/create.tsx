@@ -5,39 +5,35 @@ import Grid from '@mui/material/Grid'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 // ** Demo Components Imports
-import FormGroups from 'src/views/users/Form'
+import UserForm from 'src/views/users/Form'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 
 import { GetServerSideProps } from 'next/types';
 
-//import prisma from 'lib/prisma';
+import prisma from 'lib/prisma';
+import { Group } from '@prisma/client';
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const permissions = [
-    "Humaira Sims",
-    "Santiago Solis",
-    "Dawid Floyd",
-    "Mateo Barlow",
-    "Samia Navarro",
-    "Kaden Fields",
-    "Genevieve Watkins",
-    "Mariah Hickman",
-    "Rocco Richardson",
-    "Harris Glenn"
-  ];
+  const groups = await prisma.group.findMany();
 
-  const permissionsGroup: string[] = [];
+  //@ts-ignore
+  const userGroups: number = [];
 
   return {
-    props: { permissions, permissionsGroup }
+    props: { 
+      user: null, 
+      groups: groups, 
+      userGroups: userGroups 
+    }
   };
 };
 
 type Props = {
-  permissions: string[];
-  permissionsGroup: string[];
+  user: undefined;
+  groups: Group[];
+  userGroups: number[];
 }
 
 const FormLayouts: React.FC<Props> = (props) => {
@@ -45,7 +41,7 @@ const FormLayouts: React.FC<Props> = (props) => {
     <DatePickerWrapper>
       <Grid container >
         <Grid item xs={12}>
-          <FormGroups permissions={props.permissions} permissionsGroup={props.permissionsGroup}/>
+          <UserForm user={props.user} groups={props.groups} userGroups={props.userGroups}/>
         </Grid>
       </Grid>
     </DatePickerWrapper>
