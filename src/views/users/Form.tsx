@@ -19,10 +19,11 @@ import Phone from 'mdi-material-ui/Phone'
 import EmailOutline from 'mdi-material-ui/EmailOutline'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
+import { Group } from '@prisma/client'
 
 type Props = {
   user: User;
-  permissions: Permission[];
+  groups: Group[];
 }
 
 const FormUsers: React.FC<Props> = (props) => {

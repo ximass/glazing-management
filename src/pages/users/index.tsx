@@ -4,19 +4,19 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 
 // ** Demo Components Imports
-import TableStickyHeader from 'src/views/users/List';
+import UsersTable from 'src/views/users/List';
 
-const GroupList = () => {
+const UsersList = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
           <CardHeader title='Usuários' titleTypographyProps={{ variant: 'h6' }} />
-          <TableStickyHeader />
+          <UsersTable />
         </Card>
       </Grid>
     </Grid>
   )
 }
 
-export default GroupList
+export default UsersList

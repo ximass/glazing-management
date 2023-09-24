@@ -10,12 +10,26 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
+// ===========================USERS==============================
+
+model User {
+    id          Int             @id @default(autoincrement())
+    email       String
+    name        String
+    login       String
+    password    String
+    groups      Group[]
+    createdAt   DateTime        @default(now())
+    updatedAt   DateTime        @updatedAt
+}
+
 // ===========================GROUPS=============================
 
 model Group {
     id          Int             @id @default(autoincrement())
     name        String
     level       Int
+    users       User[]
     permissions Permission[]
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
