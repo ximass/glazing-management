@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, SyntheticEvent } from 'react'
+import Router from 'next/router';
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -27,21 +28,46 @@ type Props = {
 }
 
 const UserForm: React.FC<Props> = (props) => {
-  const [permissionsSelect, setGroups] = useState<string[]>([]);
+  const [id, setId] = useState(props.user ? props.user.id : null);
+  const [name, setName] = useState(props.user ? props.user.name : '');
+  const [email, setEmail] = useState(props.user ? props.user.email : '');
+  const [login, setLogin] = useState(props.user ? props.user.login : '');
+  const [password, setPassword] = useState(props.user ? props.user.password : '');
+  const [userGroups, setGroups] = useState(props.user ? props.userGroups.map(group => group.toString()) : ['']);
 
   const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
     setGroups(event.target.value as string[])
+  }
+
+  const onSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    try {
+      const body = { id, email, name, login, password, userGroups };
+      const method = props.user ? 'PUT' : 'POST';
+
+      await fetch('/api/user', {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      await Router.push('/users');
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
     <Card>
       <CardHeader title='Usuário' titleTypographyProps={{ variant: 'h6' }} />
       <CardContent>
-        <form onSubmit={e => e.preventDefault()}>
+        <form onSubmit={onSubmit}>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <TextField
-                value={props.user ? props.user.name : ''}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 fullWidth
                 label='Nome'
                 placeholder='Fulano'
@@ -56,7 +82,8 @@ const UserForm: React.FC<Props> = (props) => {
             </Grid>
             <Grid item xs={4}>
               <TextField
-                value={props.user ? props.user.email : ''}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 fullWidth
                 type='email'
                 label='Email'
@@ -72,7 +99,8 @@ const UserForm: React.FC<Props> = (props) => {
             </Grid>
             <Grid item xs={4}>
               <TextField
-                value={props.user ? props.user.login : ''}
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
                 fullWidth
                 label='Login'
                 placeholder='fulano'
@@ -90,7 +118,8 @@ const UserForm: React.FC<Props> = (props) => {
                 <InputLabel htmlFor='form-layouts-basic-password'>Senha</InputLabel>
                 <OutlinedInput
                   label='Password'
-                  value={props.user ? props.user.password : ''}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   id='form-layouts-basic-password'
                   type='password'
                   aria-describedby='form-layouts-basic-password-helper'
@@ -102,7 +131,7 @@ const UserForm: React.FC<Props> = (props) => {
                 <InputLabel id='form-layouts-separator-multiple-select-label'>Grupos</InputLabel>
                 <Select
                   multiple
-                  value={props.user ? props.userGroups.map(group => group.toString()) : ''}
+                  value={userGroups}
                   onChange={handleSelectChange}
                   id='form-layouts-separator-multiple-select'
                   labelId='form-layouts-separator-multiple-select-label'
