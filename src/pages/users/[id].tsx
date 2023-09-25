@@ -27,12 +27,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
   });
 
-  const userGroups = user ?.groups.map(group => group.id) || [];
+  const userGroups = user ? user.groups.map(group => group.id) : [];
 
   return {
     props: {
       user: JSON.parse(JSON.stringify(user)), 
-      groups: groups, 
+      groups: JSON.parse(JSON.stringify(groups)), 
       userGroups: userGroups
       }
   };

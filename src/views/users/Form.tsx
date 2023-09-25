@@ -33,7 +33,7 @@ const UserForm: React.FC<Props> = (props) => {
   const [email, setEmail] = useState(props.user ? props.user.email : '');
   const [login, setLogin] = useState(props.user ? props.user.login : '');
   const [password, setPassword] = useState(props.user ? props.user.password : '');
-  const [userGroups, setGroups] = useState(props.user ? props.userGroups.map(group => group.toString()) : ['']);
+  const [userGroups, setGroups] = useState(props.user ? props.userGroups.map(group => group.toString()) : []);
 
   const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
     setGroups(event.target.value as string[])
@@ -43,7 +43,9 @@ const UserForm: React.FC<Props> = (props) => {
     e.preventDefault();
 
     try {
-      const body = { id, email, name, login, password, userGroups };
+      const groups = userGroups.map(element => ({ id: parseInt(element) }));
+
+      const body = { id, email, name, login, password, groups };
       const method = props.user ? 'PUT' : 'POST';
 
       await fetch('/api/user', {

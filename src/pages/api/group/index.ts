@@ -9,7 +9,7 @@ export default async function handle(req, res) {
       data: {
         name: data.name,
         permissions: {
-          connect: data.groups
+          connect: data.permissions
         }
       }
     });
@@ -22,7 +22,7 @@ export default async function handle(req, res) {
       data: {
         name: data.name,
         permissions: {
-          connect: data.groups
+          connect: data.permissions
         }
       }
     });

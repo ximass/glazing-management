@@ -26,7 +26,7 @@ type Props = {
 const FormGroups: React.FC<Props> = (props) => {
   const [id, setId] = useState(props.group ? props.group.id : null);
   const [name, setName] = useState(props.group ? props.group.name : '');
-  const [groupPermissions, setPermission] = useState(props.group ? props.groupPermissions.map(group => group.toString()) : ['']);
+  const [groupPermissions, setPermission] = useState(props.group ? props.groupPermissions.map(group => group.toString()) : []);
 
   const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
     setPermission(event.target.value as string[])
@@ -36,9 +36,9 @@ const FormGroups: React.FC<Props> = (props) => {
     e.preventDefault();
 
     try {
-      const groups = groupPermissions.map(element => ({ id: parseInt(element) }));
+      const permissions = groupPermissions.map(element => ({ id: parseInt(element) }));
 
-      const body = { id, name, groups };
+      const body = { id, name, permissions };
       const method = props.group ? 'PUT' : 'POST';
 
       await fetch('/api/group', {

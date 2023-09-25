@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: { 
       user: null, 
-      groups: groups, 
+      groups: JSON.parse(JSON.stringify(groups)), 
       userGroups: userGroups 
     }
   };

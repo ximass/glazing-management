@@ -47,9 +47,11 @@ const UsersTable: React.FC<Props> = (props) => {
 
   const rows: Data[] = [];
 
-  props.users.forEach(user => {
-    rows.push(createData(user.name, user.login, user.email));
-  });
+  if (props.users) {
+    props.users.forEach(user => {
+      rows.push(createData(user.name, user.login, user.email));
+    });
+  }
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
