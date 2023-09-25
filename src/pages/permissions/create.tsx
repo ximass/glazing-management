@@ -15,7 +15,7 @@ const FormLayouts = () => {
     <DatePickerWrapper>
       <Grid container >
         <Grid item xs={12}>
-          <FormPermission />
+          <FormPermission permission={undefined}/>
         </Grid>
       </Grid>
     </DatePickerWrapper>

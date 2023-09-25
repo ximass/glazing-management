@@ -17,6 +17,7 @@ import MenuItem from '@mui/material/MenuItem'
 // ** Icons Imports
 import EmailOutline from 'mdi-material-ui/EmailOutline'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
+
 import { Group, User } from '@prisma/client'
 
 type Props = {

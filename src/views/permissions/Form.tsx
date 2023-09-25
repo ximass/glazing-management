@@ -10,18 +10,25 @@ import TextField from '@mui/material/TextField'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 
-const FormPermission = () => {
+import { Permission } from '@prisma/client'
 
-  const [name, setName] = useState('');
+type Props = {
+  permission: Permission | undefined;
+}
+
+const FormPermission: React.FC<Props> = (props) => {
+  const [id, setId] = useState(props.permission ? props.permission.id : null);
+  const [name, setName] = useState(props.permission ? props.permission.name : '');
 
   const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
     try {
-      const body = { name };
+      const body = { id, name };
+      const method = props.permission ? 'PUT' : 'POST';
 
       await fetch('/api/permission', {
-        method: 'POST',
+        method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
@@ -30,8 +37,6 @@ const FormPermission = () => {
     } catch (error) {
       console.error(error);
     }
-
-    console.log('entrouuu');
   }
 
   return (
@@ -41,7 +46,7 @@ const FormPermission = () => {
         <form onSubmit={onSubmit}>
           <Grid container spacing={5}>
             <Grid item xs={12}>
-              <TextField fullWidth label='Permissão' placeholder='Ex.: Pedidos' value={name} onChange={(e) => setName(e.target.value)}/>
+              <TextField fullWidth label='Permissão' placeholder='Ex.: Pedidos' value={name} onChange={(e) => setName(e.target.value)} />
             </Grid>
             <Grid item xs={12}>
               <Button type='submit' variant='contained' size='large'>
