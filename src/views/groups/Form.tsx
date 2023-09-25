@@ -1,5 +1,6 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, SyntheticEvent } from 'react';
+import Router from 'next/router';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -14,44 +15,73 @@ import MenuItem from '@mui/material/MenuItem'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
+import { Group, Permission } from '@prisma/client'
 
 type Props = {
-  permissions: string[];
-  permissionsGroup: string[];
+  group: Group | undefined;
+  permissions: Permission[];
+  groupPermissions: number[];
 }
 
 const FormGroups: React.FC<Props> = (props) => {
-
-  const [permissionsSelect, setPermission] = useState<string[]>([]);
+  const [id, setId] = useState(props.group ? props.group.id : null);
+  const [name, setName] = useState(props.group ? props.group.name : '');
+  const [groupPermissions, setPermission] = useState(props.group ? props.groupPermissions.map(group => group.toString()) : ['']);
 
   const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
     setPermission(event.target.value as string[])
+  }
+
+  const onSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    try {
+      const groups = groupPermissions.map(element => ({ id: parseInt(element) }));
+
+      const body = { id, name, groups };
+      const method = props.group ? 'PUT' : 'POST';
+
+      await fetch('/api/group', {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      await Router.push('/groups');
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
     <Card>
       <CardHeader title='Grupo' titleTypographyProps={{ variant: 'h6' }} />
       <CardContent>
-        <form onSubmit={e => e.preventDefault()}>
+        <form onSubmit={onSubmit}>
           <Grid container spacing={5}>
             <Grid item xs={6}>
-              <TextField fullWidth label='Nome do grupo' placeholder='Ex.: Administrador' />
+              <TextField
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                label='Nome do grupo'
+                placeholder='Ex.: Administrador' />
             </Grid>
             <Grid item xs={6}>
               <FormControl fullWidth>
                 <InputLabel id='form-layouts-separator-multiple-select-label'>Permissões</InputLabel>
                 <Select
                   multiple
-                  value={props.permissionsGroup}
+                  value={groupPermissions}
                   onChange={handleSelectChange}
                   id='form-layouts-separator-multiple-select'
                   labelId='form-layouts-separator-multiple-select-label'
                   input={<OutlinedInput label='Permissões' id='permissions' />}
                 >
                   {
-                    props.permissions.map((name) => (
-                      <MenuItem key={name} value={name}>
-                        {name}
+                    props.permissions.map((permission) => (
+                      <MenuItem key={permission.id} value={permission.id}>
+                        {permission.name}
                       </MenuItem>
                     ))
                   }
