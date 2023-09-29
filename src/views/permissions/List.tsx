@@ -10,13 +10,12 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
+import Button from '@mui/material/Button';
+
 import { Permission } from '@prisma/client';
 
-// import Link from 'next/dist/client/link'
-// import link from 'next/link'
-
 interface Column {
-  id: 'name'
+  id: 'id' | 'name'
   label: string
   minWidth?: number
   align?: 'right'
@@ -28,6 +27,7 @@ const columns: readonly Column[] = [
 ]
 
 interface Data {
+  id: number,
   name: string
 }
 
@@ -35,8 +35,8 @@ type Props = {
   permissions: Permission[];
 }
 
-function createData(name: string): Data {
-  return { name }
+function createData(id: number, name: string): Data {
+  return { id, name }
 }
 
 const TableStickyHeader: React.FC<Props> = (props) => {
@@ -47,7 +47,7 @@ const TableStickyHeader: React.FC<Props> = (props) => {
   const rows: Data[] = [];
 
   props.permissions.forEach(permission => {
-    rows.push(createData(permission.name))
+    rows.push(createData(permission.id, permission.name))
   });
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -70,6 +70,7 @@ const TableStickyHeader: React.FC<Props> = (props) => {
                   {column.label}
                 </TableCell>
               ))}
+              <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -85,6 +86,11 @@ const TableStickyHeader: React.FC<Props> = (props) => {
                       </TableCell>
                     )
                   })}
+                  <TableCell>
+                    <Button color='primary' variant='text' href={'/permissions/' + row.id}>
+                      Editar
+                    </Button>
+                  </TableCell>
                 </TableRow>
               )
             })}

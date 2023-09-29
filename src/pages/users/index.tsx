@@ -33,7 +33,7 @@ const UsersList: React.FC<Props> = (props) => {
       <Grid item xs={12}>
         <Box sx={{ textAlign: 'right', padding: '10px' }}>
           <Button variant='contained' color='primary' href='/users/create'>
-            Novo Usuário
+            Novo usuário
           </Button>
         </Box>
         <Card>

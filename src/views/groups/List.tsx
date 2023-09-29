@@ -10,10 +10,12 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
+import Button from '@mui/material/Button';
+
 import { Group } from '@prisma/client'
 
 interface Column {
-  id: 'name'
+  id: 'id' | 'name'
   label: string
   minWidth?: number
   align?: 'right'
@@ -25,6 +27,7 @@ const columns: readonly Column[] = [
 ]
 
 interface Data {
+  id: number,
   name: string
 }
 
@@ -32,8 +35,8 @@ type Props = {
   groups: Group[];
 }
 
-function createData(name: string): Data {
-  return { name }
+function createData(id: number, name: string): Data {
+  return { id, name }
 }
 
 const GroupsTable: React.FC<Props> = (props) => {
@@ -44,7 +47,7 @@ const GroupsTable: React.FC<Props> = (props) => {
   const rows: Data[] = [];
 
   props.groups.forEach(group => {
-    rows.push(createData(group.name));
+    rows.push(createData(group.id, group.name));
   });
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -67,6 +70,7 @@ const GroupsTable: React.FC<Props> = (props) => {
                   {column.label}
                 </TableCell>
               ))}
+              <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -82,6 +86,11 @@ const GroupsTable: React.FC<Props> = (props) => {
                       </TableCell>
                     )
                   })}
+                  <TableCell>
+                    <Button color='primary' variant='text' href={'/groups/' + row.id}>
+                      Editar
+                    </Button>
+                  </TableCell>
                 </TableRow>
               )
             })}

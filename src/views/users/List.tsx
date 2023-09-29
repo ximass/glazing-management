@@ -10,10 +10,12 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
+import Button from '@mui/material/Button';
+
 import { User } from '@prisma/client'
 
 interface Column {
-  id: 'name' | 'login' | 'email'
+  id: 'id' | 'name' | 'login' | 'email'
   label: string
   minWidth?: number
   align?: 'right'
@@ -27,6 +29,7 @@ const columns: readonly Column[] = [
 ]
 
 interface Data {
+  id: number,
   name: string,
   login: string,
   email: string
@@ -36,8 +39,8 @@ type Props = {
   users: User[];
 }
 
-function createData(name: string, login: string, email: string): Data {
-  return { name, login, email }
+function createData(id: number, name: string, login: string, email: string): Data {
+  return { id, name, login, email }
 }
 
 const UsersTable: React.FC<Props> = (props) => {
@@ -49,7 +52,7 @@ const UsersTable: React.FC<Props> = (props) => {
 
   if (props.users) {
     props.users.forEach(user => {
-      rows.push(createData(user.name, user.login, user.email));
+      rows.push(createData(user.id, user.name, user.login, user.email));
     });
   }
 
@@ -73,6 +76,7 @@ const UsersTable: React.FC<Props> = (props) => {
                   {column.label}
                 </TableCell>
               ))}
+              <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -88,6 +92,11 @@ const UsersTable: React.FC<Props> = (props) => {
                       </TableCell>
                     )
                   })}
+                  <TableCell>
+                    <Button color='primary' variant='text' href={'/users/' + row.id}>
+                      Editar
+                    </Button>
+                  </TableCell>
                 </TableRow>
               )
             })}
