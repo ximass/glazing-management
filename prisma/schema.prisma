@@ -41,3 +41,26 @@ model Permission {
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
 }
+
+// ===========================BASE=================================
+
+model Categorie {
+    id          Int             @id @default(autoincrement())
+    name        String
+    serial      Serial          @relation(fields: [ref_serial], references: [id])
+    ref_serial  Int
+    active      Boolean         @default(true)
+    createdAt   DateTime        @default(now())
+    updatedAt   DateTime        @updatedAt
+}
+
+model Serial {
+    id          Int             @id @default(autoincrement())
+    name        String
+    value       String
+    pattern     String
+    categories  Categorie[]
+    ref_module  Int?
+    createdAt   DateTime        @default(now())
+    updatedAt   DateTime        @updatedAt
+}

@@ -70,6 +70,7 @@ const UserForm: React.FC<Props> = (props) => {
               <TextField
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required={true}
                 fullWidth
                 label='Nome'
                 placeholder='Fulano'
@@ -86,6 +87,7 @@ const UserForm: React.FC<Props> = (props) => {
               <TextField
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required={true}
                 fullWidth
                 type='email'
                 label='Email'
@@ -103,6 +105,7 @@ const UserForm: React.FC<Props> = (props) => {
               <TextField
                 value={login}
                 onChange={(e) => setLogin(e.target.value)}
+                required={true}
                 fullWidth
                 label='Login'
                 placeholder='fulano'
@@ -122,6 +125,7 @@ const UserForm: React.FC<Props> = (props) => {
                   label='Password'
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required={true}
                   id='form-layouts-basic-password'
                   type='password'
                   aria-describedby='form-layouts-basic-password-helper'
@@ -135,6 +139,7 @@ const UserForm: React.FC<Props> = (props) => {
                   multiple
                   value={userGroups}
                   onChange={handleSelectChange}
+                  required={true}
                   id='form-layouts-separator-multiple-select'
                   labelId='form-layouts-separator-multiple-select-label'
                   input={<OutlinedInput label='Permissões' id='groups' />}

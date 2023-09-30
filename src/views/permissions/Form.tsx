@@ -46,7 +46,7 @@ const FormPermission: React.FC<Props> = (props) => {
         <form onSubmit={onSubmit}>
           <Grid container spacing={5}>
             <Grid item xs={12}>
-              <TextField fullWidth label='Permissão' placeholder='Ex.: Pedidos' value={name} onChange={(e) => setName(e.target.value)} />
+              <TextField fullWidth label='Permissão' placeholder='Ex.: Pedidos' value={name} onChange={(e) => setName(e.target.value)} required={true}/>
             </Grid>
             <Grid item xs={12}>
               <Button type='submit' variant='contained' size='large'>

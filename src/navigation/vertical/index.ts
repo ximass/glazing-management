@@ -9,7 +9,7 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 const navigation = (): VerticalNavItemsType => {
   return [
     {
-      title: 'Dashboard',
+      title: 'Início',
       icon: HomeOutline,
       path: '/'
     },
