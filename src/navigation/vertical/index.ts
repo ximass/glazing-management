@@ -2,6 +2,8 @@
 import AccountMultiplePlus from 'mdi-material-ui/AccountMultiplePlus'
 import AccountGroup from 'mdi-material-ui/AccountGroup'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
+import CogOutline from 'mdi-material-ui/CogOutline'
+import Cog from 'mdi-material-ui/Cog'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -9,7 +11,7 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 const navigation = (): VerticalNavItemsType => {
   return [
     {
-      title: 'Dashboard',
+      title: 'Início',
       icon: HomeOutline,
       path: '/'
     },
@@ -34,6 +36,21 @@ const navigation = (): VerticalNavItemsType => {
       path: '/permissions',
       openInNewTab: false
     },
+    {
+      sectionTitle: 'Configurações'
+    },
+    {
+      title: 'Seriais',
+      icon: CogOutline,
+      path: '/serials',
+      openInNewTab: false
+    },
+    {
+      title: 'Categorias',
+      icon: Cog,
+      path: '/categories',
+      openInNewTab: false
+    }
   ]
 }
 

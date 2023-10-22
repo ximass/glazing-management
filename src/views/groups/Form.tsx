@@ -63,6 +63,7 @@ const FormGroups: React.FC<Props> = (props) => {
               <TextField
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required={true}
                 fullWidth
                 label='Nome do grupo'
                 placeholder='Ex.: Administrador' />
@@ -74,6 +75,7 @@ const FormGroups: React.FC<Props> = (props) => {
                   multiple
                   value={groupPermissions}
                   onChange={handleSelectChange}
+                  required={true}
                   id='form-layouts-separator-multiple-select'
                   labelId='form-layouts-separator-multiple-select-label'
                   input={<OutlinedInput label='Permissões' id='permissions' />}
