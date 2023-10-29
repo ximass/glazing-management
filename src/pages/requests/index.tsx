@@ -33,11 +33,11 @@ const RequestsList: React.FC<Props> = (props) => {
       <Grid item xs={12}>
         <Box sx={{ textAlign: 'right', padding: '10px' }}>
           <Button variant='contained' color='primary' href='/requests/create'>
-            Novo cliente
+            Novo pedido
           </Button>
         </Box>
         <Card>
-          <CardHeader title='Clientes' titleTypographyProps={{ variant: 'h6' }} />
+          <CardHeader title='Pedidos' titleTypographyProps={{ variant: 'h6' }} />
           <RequestsTable requests={props.requests} />
         </Card>
       </Grid>

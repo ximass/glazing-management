@@ -36,9 +36,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 type Props = {
   request: undefined;
-  user: User[];
+  users: User[];
   userNum: number[];
-  customer: Customer[];
+  customers: Customer[];
   customerNum: number[];
 }
 
@@ -47,7 +47,7 @@ const FormLayouts: React.FC<Props> = (props) => {
     <DatePickerWrapper>
       <Grid container >
         <Grid item xs={12}>
-          <RequestForm request={props.request} customers={props.customer} customerNum={props.customerNum} users={props.user} userNum={props.userNum} />
+          <RequestForm request={props.request} customers={props.customers} customerNum={props.customerNum} users={props.users} userNum={props.userNum} />
         </Grid>
       </Grid>
     </DatePickerWrapper>

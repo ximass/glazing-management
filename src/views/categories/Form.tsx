@@ -124,4 +124,4 @@ const CategorieForm: React.FC<Props> = (props) => {
   )
 }
 
-export default CategoryForm
+export default CategorieForm
