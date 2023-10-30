@@ -37,7 +37,7 @@ const FormLayouts: React.FC<Props> = (props) => {
     <DatePickerWrapper>
       <Grid container >
         <Grid item xs={12}>
-          <CategorieForm categorie={undefined} categorieSerial={props.categorieSerial} serials={props.serials}/>
+          <CategorieForm category={undefined} categorySerial={props.categorieSerial} serials={props.serials}/>
         </Grid>
       </Grid>
     </DatePickerWrapper>
