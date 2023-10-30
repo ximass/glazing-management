@@ -3,6 +3,7 @@ import AccountMultiplePlus from 'mdi-material-ui/AccountMultiplePlus'
 import AccountGroup from 'mdi-material-ui/AccountGroup'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
 import CogOutline from 'mdi-material-ui/CogOutline'
+import Cart from 'mdi-material-ui/Cart'
 import Cog from 'mdi-material-ui/Cog'
 
 // ** Type import
@@ -26,7 +27,7 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Grupos',
-      icon: AccountGroup,
+      icon: AccountMultiplePlus,
       path: '/groups',
       openInNewTab: false
     },
@@ -34,6 +35,18 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Permissões',
       icon: AccountMultiplePlus,
       path: '/permissions',
+      openInNewTab: false
+    },
+    {
+      title: 'Clientes',
+      icon: AccountGroup,
+      path: '/customers',
+      openInNewTab: false
+    },
+    {
+      title: 'Pedidos',
+      icon: Cart,
+      path: '/requests',
       openInNewTab: false
     },
     {

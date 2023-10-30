@@ -12,10 +12,10 @@ import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import Button from '@mui/material/Button';
 
-import { Category } from '@prisma/client'
+import { Request } from '@prisma/client'
 
 interface Column {
-  id: 'id' | 'name' | 'serial' | 'active'
+  id: 'id' | 'customer' | 'user' | 'value'
   label: string
   minWidth?: number
   align?: 'right'
@@ -23,36 +23,36 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'name', label: 'Nome', minWidth: 170 },
-  { id: 'serial', label: 'Serial', minWidth: 170 },
-  { id: 'active', label: 'Ativo?', minWidth: 170 }
+  { id: 'customer', label: 'Cliente', minWidth: 130 },
+  { id: 'user', label: 'Usuário', minWidth: 100 },
+  { id: 'value', label: 'Valor', minWidth: 100 }
 ]
 
 interface Data {
   id: number,
-  name: string,
-  serial: number,
-  active: string
+  value: number
 }
 
 type Props = {
-  categories: Category[];
+  requests: Request[];
 }
 
-function createData(id: number, name: string, serial: number, active: string): Data {
-  return { id, name, serial, active }
+function createData(id: number, value: number): Data {
+  return { id, value }
 }
 
-const CategoriesTable: React.FC<Props> = (props) => {
+const RequestsTable: React.FC<Props> = (props) => {
   // ** States
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
   const rows: Data[] = [];
 
-  props.categories.forEach(category => {
-    rows.push(createData(category.id, category.name, category.ref_serial, category.active ? 'Sim' : 'Não'));
-  });
+  if (props.requests) {
+    props.requests.forEach(request => {
+      rows.push(createData(request.id, request.value));
+    });
+  }
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
@@ -80,7 +80,7 @@ const CategoriesTable: React.FC<Props> = (props) => {
           <TableBody>
             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
               return (
-                <TableRow hover role='checkbox' tabIndex={-1} key={row.name}>
+                <TableRow hover role='checkbox' tabIndex={-1} key={row.id}>
                   {columns.map(column => {
                     const value = row[column.id]
 
@@ -91,7 +91,7 @@ const CategoriesTable: React.FC<Props> = (props) => {
                     )
                   })}
                   <TableCell>
-                    <Button color='primary' variant='text' href={'/categories/' + row.id}>
+                    <Button color='primary' variant='text' href={'/requests/' + row.id}>
                       Editar
                     </Button>
                   </TableCell>
@@ -114,4 +114,4 @@ const CategoriesTable: React.FC<Props> = (props) => {
   )
 }
 
-export default CategoriesTable
+export default RequestsTable

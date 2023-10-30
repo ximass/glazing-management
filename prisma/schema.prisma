@@ -14,11 +14,13 @@ datasource db {
 
 model User {
     id          Int             @id @default(autoincrement())
-    email       String
+    email       String          @unique
     name        String
-    login       String
+    login       String          @unique
     password    String
     groups      Group[]
+    requests    Request[]
+    products    Product[]
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
 }
@@ -44,12 +46,13 @@ model Permission {
 
 // ===========================BASE=================================
 
-model Categorie {
+model Category {
     id          Int             @id @default(autoincrement())
     name        String
     serial      Serial          @relation(fields: [ref_serial], references: [id])
     ref_serial  Int
     active      Boolean         @default(true)
+    product     Product[]
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
 }
@@ -59,8 +62,66 @@ model Serial {
     name        String
     value       String
     pattern     String
-    categories  Categorie[]
+    categories  Category[]
     ref_module  Int?
+    product     Product[]
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
+}
+
+// ===========================CUSTOMERS=================================
+
+model Customer {
+    id              Int             @id @default(autoincrement())
+    identity        String          @unique
+    name            String
+    info            String
+    address         String
+    uf              String
+    email           String
+    phone           String
+    city            String
+    cep             String
+    country         String
+    requests         Request[]
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+}
+
+model Request {
+    id              Int             @id @default(autoincrement())
+    customers        Customer[]
+    users            User[]
+    value           Float
+    prod_to_request Prod_to_request[]
+    dt_request      DateTime        @default(now())
+    dt_delivery     DateTime        @updatedAt
+}
+
+model Prod_to_request {
+    id             Int            @id @default(autoincrement())
+    requests        Request        @relation(fields: [ref_request], references: [id])
+    products        Product        @relation(fields: [ref_product], references: [id])
+    ref_request    Int
+    ref_product    Int
+    value          Float
+    quantity       Int        
+}
+
+// ===========================PRODUCTS=================================
+
+model Product {
+    id              Int             @id @default(autoincrement())
+    state           Int
+    category        Category        @relation(fields: [ref_category], references: [id])
+    ref_category    Int
+    owner           User            @relation(fields: [ref_owner], references: [id])
+    ref_owner       Int
+    name            String
+    info            String
+    serial          Serial          @relation(fields: [ref_serial], references: [id])
+    ref_serial      Int
+    prod_to_request Prod_to_request[]
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
 }

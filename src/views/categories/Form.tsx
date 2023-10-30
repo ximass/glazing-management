@@ -15,19 +15,19 @@ import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { Categorie, Serial } from '@prisma/client'
+import { Category, Serial } from '@prisma/client'
 
 type Props = {
-  categorie: Categorie | undefined;
+  category: Category | undefined;
   serials: Serial[];
-  categorieSerial: number | undefined;
+  categorySerial: number | undefined;
 }
 
 const CategorieForm: React.FC<Props> = (props) => {
-  const [id, setId] = useState(props.categorie ? props.categorie.id : null);
-  const [name, setName] = useState(props.categorie ? props.categorie.name : '');
-  const [active, setActive] = useState(props.categorie ? props.categorie.active : true);
-  const [categorieSerial, setSerial] = useState(props.categorie ? props.categorieSerial : null);
+  const [id, setId] = useState(props.category ? props.category.id : null);
+  const [name, setName] = useState(props.category ? props.category.name : '');
+  const [active, setActive] = useState(props.category ? props.category.active : true);
+  const [categorySerial, setSerial] = useState(props.category ? props.categorySerial : null);
 
   const onChangeSerial = (event: SelectChangeEvent<number>) => {
     setSerial(event.target.value as number)
@@ -41,8 +41,8 @@ const CategorieForm: React.FC<Props> = (props) => {
     e.preventDefault();
 
     try {;
-      const body = { id, name, active, ref_serial: categorieSerial };
-      const method = props.categorie ? 'PUT' : 'POST';
+      const body = { id, name, active, ref_serial: categorySerial };
+      const method = props.category ? 'PUT' : 'POST';
 
       await fetch('/api/categorie', {
         method: method,
@@ -75,7 +75,7 @@ const CategorieForm: React.FC<Props> = (props) => {
               <FormControl fullWidth>
                 <InputLabel id='form-layouts-separator-multiple-select-label'>Seriais</InputLabel>
                 <Select
-                  value={categorieSerial ? categorieSerial : ''}
+                  value={categorySerial ? categorySerial : ''}
                   onChange={onChangeSerial}
                   required={true}
                   id='form-layouts-separator-multiple-select'

@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 // ** Demo Components Imports
-import UserForm from 'src/views/users/Form'
+import CustomerForm from 'src/views/customers/Form'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
@@ -13,35 +13,24 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { GetServerSideProps } from 'next/types';
 
 import prisma from 'lib/prisma';
-import { Group, User } from '@prisma/client';
+import { Customer } from '@prisma/client';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const groups = await prisma.group.findMany();
-
-  const user = await prisma.user.findUnique({
+  const customer = await prisma.customer.findUnique({
     where: {
       id: Number(params?.id),
-    },
-    include: {
-      groups: true
     }
   });
 
-  const userGroups = user ? user.groups.map(group => group.id) : [];
-
   return {
     props: {
-      user: JSON.parse(JSON.stringify(user)), 
-      groups: JSON.parse(JSON.stringify(groups)), 
-      userGroups: userGroups
+      customer: JSON.parse(JSON.stringify(customer))
       }
   };
 };
 
 type Props = {
-  user: User;
-  groups: Group[];
-  userGroups: number[];
+  customer: Customer;
 }
 
 const FormLayouts: React.FC<Props> = (props) => {
@@ -49,7 +38,7 @@ const FormLayouts: React.FC<Props> = (props) => {
     <DatePickerWrapper>
       <Grid container >
         <Grid item xs={12}>
-          <UserForm user={props.user} groups={props.groups} userGroups={props.userGroups}/>
+          <CustomerForm customer={props.customer}/>
         </Grid>
       </Grid>
     </DatePickerWrapper>
