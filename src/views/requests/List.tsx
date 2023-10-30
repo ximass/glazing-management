@@ -30,6 +30,8 @@ const columns: readonly Column[] = [
 
 interface Data {
   id: number,
+  customer: string,
+  user: string,
   value: number
 }
 
