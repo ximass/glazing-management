@@ -44,7 +44,7 @@ const CategorieForm: React.FC<Props> = (props) => {
       const body = { id, name, active, ref_serial: categorySerial };
       const method = props.category ? 'PUT' : 'POST';
 
-      await fetch('/api/categorie', {
+      await fetch('/api/category', {
         method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
