@@ -14,7 +14,7 @@ import CategoriesTable from 'src/views/categories/List';
 import { Categorie } from '@prisma/client';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const categories = await prisma.categorie.findMany();
+  const categories = await prisma.category.findMany();
 
   return {
     props: {
@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 };
 
 type Props = {
-  categories: Categorie[];
+  categories: Category[];
 };
 
 const CategorieList: React.FC<Props> = (props) => {
