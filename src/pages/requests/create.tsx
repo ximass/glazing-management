@@ -21,6 +21,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   //@ts-ignore
   const customerNum: number = [];
+  //@ts-ignore
   const userNum: number = [];
 
   return {
