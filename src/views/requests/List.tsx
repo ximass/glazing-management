@@ -15,7 +15,7 @@ import Button from '@mui/material/Button';
 import { Request } from '@prisma/client'
 
 interface Column {
-  id: 'id' | 'user' | 'value'
+  id: 'id' | 'value'
   label: string
   minWidth?: number
   align?: 'right'
@@ -23,13 +23,11 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'user', label: 'Usuário', minWidth: 100 },
   { id: 'value', label: 'Valor', minWidth: 100 }
 ]
 
 interface Data {
   id: number,
-  user: string,
   value: number
 }
 
@@ -37,8 +35,8 @@ type Props = {
   requests: Request[];
 }
 
-function createData(id: number, user: string, value: number): Data {
-  return { id, user, value }
+function createData(id: number, value: number): Data {
+  return { id, value }
 }
 
 const RequestsTable: React.FC<Props> = (props) => {
@@ -50,7 +48,7 @@ const RequestsTable: React.FC<Props> = (props) => {
 
   if (props.requests) {
     props.requests.forEach(request => {
-      rows.push(createData(request.id, request.user, request.value));
+      rows.push(createData(request.id, request.value));
     });
   }
 
