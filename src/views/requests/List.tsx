@@ -52,7 +52,7 @@ const RequestsTable: React.FC<Props> = (props) => {
 
   if (props.requests) {
     props.requests.forEach(request => {
-      rows.push(createData(request.id, request.value));
+      rows.push(createData(request.id, request.customer, request.user, request.value));
     });
   }
 
