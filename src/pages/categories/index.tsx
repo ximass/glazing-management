@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 // ** Demo Components Imports
 import CategoriesTable from 'src/views/categories/List';
 
-import { Categorie } from '@prisma/client';
+import { Category } from '@prisma/client';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const categories = await prisma.category.findMany();
