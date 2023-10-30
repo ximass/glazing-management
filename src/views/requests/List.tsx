@@ -39,8 +39,8 @@ type Props = {
   requests: Request[];
 }
 
-function createData(id: number, value: number): Data {
-  return { id, value }
+function createData(id: number, customer: string, user: string, value: number): Data {
+  return { id, customer, user, value }
 }
 
 const RequestsTable: React.FC<Props> = (props) => {
