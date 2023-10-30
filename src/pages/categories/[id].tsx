@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 };
 
 type Props = {
-  categorie: Categorie;
+  categorie: Category;
   serials: Serial[];
 }
 
