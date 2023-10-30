@@ -1,5 +1,5 @@
 // ** React Imports
-import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react'
+import { ChangeEvent, MouseEvent, ReactNode, SyntheticEvent, useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -33,6 +33,13 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 
+
+import { getCsrfToken } from 'next-auth/client'
+
+import { signIn } from "next-auth/client"
+
+
+
 interface State {
   password: string
   showPassword: boolean
@@ -56,27 +63,72 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
   }
 }))
 
-const LoginPage = () => {
-  // ** State
-  const [values, setValues] = useState<State>({
-    password: '',
-    showPassword: false
-  })
+//@ts-ignore
+export async function getServerSideProps(context) {
+  const csrfToken = await getCsrfToken(context);
+  return {
+    props: {
+      csrfToken: csrfToken == undefined ? null : csrfToken,
+    },
+  }
+}
+
+//@ts-ignore
+const LoginPage = (props) => {
+
+  const [username, setUser] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState({text:""});
+
 
   // ** Hook
   const theme = useTheme()
   const router = useRouter()
 
-  const handleChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
 
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
+    console.log(showPassword);
+    setShowPassword(!showPassword);
   }
 
   const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
+  }
+
+
+  const onSubmit = async (e: SyntheticEvent) => {
+
+    e.preventDefault();
+    const result = await signIn("credentials", {
+      username: username,
+      password: password,
+      redirect: false,
+       callbackUrl: "/"
+    })
+
+    if(result!.ok && result?.error != "User not found!"){
+      router.push("/");
+    }
+    else
+    {
+      //fazer algo aqui
+    }
+    
+    // try {
+    //   const body = { username, password };
+    //   const method = 'POST';
+
+    //   await fetch('/api/auth/signin/credentials', {
+    //     method: method,
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(body),
+    //   });
+      
+
+    // } catch (error) {
+    //   console.error(error);
+    // }
   }
 
   return (
@@ -161,16 +213,30 @@ const LoginPage = () => {
               Faça login no sistema! 👋🏻
             </Typography>
           </Box>
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='email' label='Email' sx={{ marginBottom: 4 }} />
+          <form noValidate autoComplete='off' onSubmit={onSubmit}>
+          <FormControl fullWidth>
+              <input name="csrfToken" type="hidden" defaultValue={props.csrfToken} />
+              <TextField
+                id='auth-login-username'
+                onChange={(e) => setUser(e.target.value)}
+                label='Usuário'
+              />
+              {/* <OutlinedInput
+                label='Usuário'
+                value=''
+                id='auth-login-username'
+                type='text'
+                onChange={(e) => setUser(e.target.value)}
+
+              /> */}
+            </FormControl>
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-login-password'>Senha</InputLabel>
               <OutlinedInput
                 label='Senha'
-                value={values.password}
                 id='auth-login-password'
-                onChange={handleChange('password')}
-                type={values.showPassword ? 'text' : 'password'}
+                onChange={(e) => setPassword(e.target.value)}
+                type= {showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
@@ -179,7 +245,7 @@ const LoginPage = () => {
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
-                      {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                    {showPassword ? <EyeOutline /> : <EyeOffOutline />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -189,8 +255,9 @@ const LoginPage = () => {
               fullWidth
               size='large'
               variant='contained'
-              sx={{ marginBottom: 7 }}
-              onClick={() => router.push('/')}
+              sx={{ marginBottom: 7,
+                    marginTop: 5 }}
+              onClick={onSubmit}
             >
               Login
             </Button>

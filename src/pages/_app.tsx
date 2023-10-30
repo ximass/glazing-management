@@ -1,8 +1,10 @@
 // ** Next Imports
 import Head from 'next/head'
-import { Router } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+import { useSession, getSession } from "next-auth/client"
+//import { SessionProvider } from "next-auth/react"
 
 // ** Loader Import
 import NProgress from 'nprogress'
@@ -29,12 +31,14 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import { React } from 'mdi-material-ui'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
   Component: NextPage
   emotionCache: EmotionCache
 }
+
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -51,9 +55,20 @@ if (themeConfig.routingLoader) {
   })
 }
 
+
+
 // ** Configure JSS & ClassName
 const App = (props: ExtendedAppProps) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
+
+  const router = useRouter();
+
+  const [session, loading] = useSession();
+
+  if (!loading && !session) 
+  {
+    router.push("/auth/login");
+  }
 
   // Variables
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
