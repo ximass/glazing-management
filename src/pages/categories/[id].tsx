@@ -13,10 +13,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { GetServerSideProps } from 'next/types';
 
 import prisma from 'lib/prisma';
-import { Categorie, Serial } from '@prisma/client';
+import { Category, Serial } from '@prisma/client';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const categorie = await prisma.categorie.findUnique({
+  const categorie = await prisma.category.findUnique({
     where: {
       id: Number(params?.id),
     }
