@@ -18,10 +18,6 @@ jwt: {secret: process.env.JWT_SIGNIN_PRIVATE_KEY, maxAge: 60 * 60 * 24},
         username: { },
         password: { }
       },
-      // session: {
-      //   strategy: "jwt",
-      //   maxAge: 30 * 24 * 60 * 60, // 30 days
-      // },
 
       async authorize(credentials) {
 
@@ -65,28 +61,7 @@ jwt: {secret: process.env.JWT_SIGNIN_PRIVATE_KEY, maxAge: 60 * 60 * 24},
      }
 
      return {...session,accessToken: token.sub};
-    },
-
-
-   
-    // jwt: async ({ token, user }) => {
-    //   if (user) {
-    //     token.email = user.data.auth.email;
-    //     token.username = user.data.auth.userName;
-    //     token.userType = user.data.auth.userType;
-    //     token.accessToken = user.data.auth.token;
-    //   }
-
-    //   return token;
-    // },
-    // session: ({ session, token, user }) => {
-    //     if (token) {
-    //       session.user.email = token.email;
-    //       session.user.username = token.userName;
-    //       session.user.accessToken = token.accessToken;
-    //     }
-    //     return session;
-    //   },
+    }
 }
 };
 

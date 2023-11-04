@@ -66,6 +66,7 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 //@ts-ignore
 export async function getServerSideProps(context) {
   const csrfToken = await getCsrfToken(context);
+  
   return {
     props: {
       csrfToken: csrfToken == undefined ? null : csrfToken,
