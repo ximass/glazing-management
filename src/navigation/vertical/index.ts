@@ -50,6 +50,18 @@ const navigation = (): VerticalNavItemsType => {
       openInNewTab: false
     },
     {
+      title: 'Fornecedores',
+      icon: AccountGroup,
+      path: '/providers',
+      openInNewTab: false
+    },
+    {
+      title: 'Compras',
+      icon: Cart,
+      path: '/purchases',
+      openInNewTab: false
+    },
+    {
       sectionTitle: 'Configurações'
     },
     {

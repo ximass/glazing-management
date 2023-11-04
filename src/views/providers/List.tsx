@@ -12,10 +12,10 @@ import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import Button from '@mui/material/Button';
 
-import { Customer } from '@prisma/client'
+import { Provider } from '@prisma/client'
 
 interface Column {
-  id: 'id' | 'name' | 'email' | 'identity' | 'info' | 'cep' | 'uf' | 'address' | 'city' | 'phone' | 'country'
+  id: 'id' | 'name' | 'legal_name' | 'email' | 'identity' | 'info' | 'cep' | 'uf' | 'address' | 'city' | 'phone' | 'country' | 'company_owner' | 'company_owner_cpf'
   label: string
   minWidth?: number
   align?: 'right'
@@ -24,7 +24,8 @@ interface Column {
 
 const columns: readonly Column[] = [
   { id: 'name', label: 'Nome', minWidth: 130 },
-  { id: 'identity', label: 'Identidade', minWidth: 100 },
+  { id: 'legal_name', label: 'Nome Legal', minWidth: 130 },
+  { id: 'identity', label: 'CNPJ', minWidth: 100 },
   { id: 'email', label: 'E-mail', minWidth: 100 },
   { id: 'phone', label: 'Telefone', minWidth: 120 },
   { id: 'cep', label: 'Cep', minWidth: 120 },
@@ -32,6 +33,8 @@ const columns: readonly Column[] = [
   { id: 'uf', label: 'Uf', minWidth: 80 },
   { id: 'city', label: 'Cidade', minWidth: 120 },
   { id: 'address', label: 'Endereço', minWidth: 120 },
+  { id: 'company_owner', label: 'Responsável', minWidth: 120 },
+  { id: 'company_owner_cpf', label: 'CPF responsável', minWidth: 120 },
   { id: 'info', label: 'Info', minWidth: 120 }
 ]
 
@@ -46,27 +49,29 @@ interface Data {
   address: string,
   city: string,
   phone: string,
+  company_owner: string,
+  company_owner_cpf: string,
   country: string
 }
 
 type Props = {
-  customers: Customer[];
+  providers: Provider[];
 }
 
-function createData(id: number, name: string, email: string, identity: string, info: string, cep: string, uf: string, address: string, city: string, phone: string, country: string): Data {
-  return { id, name, email, identity, info, cep, uf, address, city, phone, country }
+function createData(id: number, name: string, legal_name: string, email: string, identity: string, info: string, cep: string, uf: string, address: string, city: string, phone: string, country: string, company_owner: string, company_owner_cpf: string): Data {
+  return { id, name, email, identity, info, cep, uf, address, city, phone, country, company_owner, company_owner_cpf, legal_name }
 }
 
-const CustomersTable: React.FC<Props> = (props) => {
+const ProvidersTable: React.FC<Props> = (props) => {
   // ** States
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
   const rows: Data[] = [];
 
-  if (props.customers) {
-    props.customers.forEach(customer => {
-      rows.push(createData(customer.id, customer.name, customer.email, customer.identity, customer.info, customer.cep, customer.uf, customer.address, customer.city, customer.phone, customer.country));
+  if (props.providers) {
+    props.providers.forEach(provider => {
+      rows.push(createData(provider.id, provider.name, provider.legal_name, provider.email, provider.identity, provider.info, provider.cep, provider.uf, provider.address, provider.city, provider.phone, provider.country, provider.company_owner, provider.company_owner_cpf));
     });
   }
 
@@ -107,7 +112,7 @@ const CustomersTable: React.FC<Props> = (props) => {
                     )
                   })}
                   <TableCell>
-                    <Button color='primary' variant='text' href={'/customers/' + row.id}>
+                    <Button color='primary' variant='text' href={'/providers/' + row.id}>
                       Editar
                     </Button>
                   </TableCell>
@@ -130,4 +135,4 @@ const CustomersTable: React.FC<Props> = (props) => {
   )
 }
 
-export default CustomersTable
+export default ProvidersTable

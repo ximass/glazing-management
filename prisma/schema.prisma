@@ -2,10 +2,14 @@
 
 generator client {
   provider = "prisma-client-js"
+  // output = "./src/generated/client"
 }
 
 datasource db {
-  provider = "postgresql"
+
+  // provider = "postgresql"
+
+  provider = "mysql"
   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
@@ -13,60 +17,65 @@ datasource db {
 // ===========================USERS==============================
 
 model User {
-    id          Int             @id @default(autoincrement())
-    email       String          @unique
-    name        String
-    login       String          @unique
-    password    String
-    groups      Group[]
-    requests    Request[]
-    products    Product[]
-    createdAt   DateTime        @default(now())
-    updatedAt   DateTime        @updatedAt
+    id              Int             @id @default(autoincrement())
+    email           String          @unique
+    name            String
+    login           String          @unique
+    password        String
+    groups          Group[]
+    requests        Request[]
+    items           Item[]
+    products        Product[]
+    providers       Provider[]
+    purchase        Purchase[]
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
 }
 
 // ===========================GROUPS=============================
 
 model Group {
-    id          Int             @id @default(autoincrement())
-    name        String
-    users       User[]
-    permissions Permission[]
-    createdAt   DateTime        @default(now())
-    updatedAt   DateTime        @updatedAt
+    id              Int             @id @default(autoincrement())
+    name            String
+    permissions     Permission[]
+    users           User[]
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
 }
 
 model Permission {
-    id          Int             @id @default(autoincrement())
-    name        String
-    groups      Group[]
-    createdAt   DateTime        @default(now())
-    updatedAt   DateTime        @updatedAt
+    id              Int             @id @default(autoincrement())
+    name            String
+    groups          Group[]
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
 }
 
 // ===========================BASE=================================
 
 model Category {
-    id          Int             @id @default(autoincrement())
-    name        String
-    serial      Serial          @relation(fields: [ref_serial], references: [id])
-    ref_serial  Int
-    active      Boolean         @default(true)
-    product     Product[]
-    createdAt   DateTime        @default(now())
-    updatedAt   DateTime        @updatedAt
+    id              Int             @id @default(autoincrement())
+    name            String
+    serial          Serial          @relation(fields: [ref_serial], references: [id])
+    ref_serial      Int
+    active          Boolean         @default(true)
+    product         Product[]
+    item            Item[]
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
 }
 
 model Serial {
-    id          Int             @id @default(autoincrement())
-    name        String
-    value       String
-    pattern     String
-    categories  Category[]
-    ref_module  Int?
-    product     Product[]
-    createdAt   DateTime        @default(now())
-    updatedAt   DateTime        @updatedAt
+    id              Int             @id @default(autoincrement())
+    name            String
+    value           String
+    pattern         String
+    categories      Category[]
+    ref_module      Int?
+    product         Product[]
+    item            Item[]
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
 }
 
 // ===========================CUSTOMERS=================================
@@ -83,34 +92,52 @@ model Customer {
     city            String
     cep             String
     country         String
-    requests         Request[]
+    requests        Request[]
     createdAt       DateTime        @default(now())
     updatedAt       DateTime        @updatedAt
 }
 
 model Request {
-    id              Int             @id @default(autoincrement())
-    customers        Customer[]
-    users            User[]
-    value           Float
-    prod_to_request Prod_to_request[]
-    dt_request      DateTime        @default(now())
-    dt_delivery     DateTime        @updatedAt
+    id                  Int             @id @default(autoincrement())
+    customers           Customer[]
+    users               User[]
+    value               Float
+    prod_to_request     Prod_to_request[]
+    dt_request          DateTime        @default(now())
+    dt_delivery         DateTime        @updatedAt
 }
 
 model Prod_to_request {
-    id             Int            @id @default(autoincrement())
+    id              Int            @id @default(autoincrement())
     requests        Request        @relation(fields: [ref_request], references: [id])
     products        Product        @relation(fields: [ref_product], references: [id])
-    ref_request    Int
-    ref_product    Int
-    value          Float
-    quantity       Int        
+    ref_request     Int
+    ref_product     Int
+    value           Float
+    quantity        Int        
 }
 
 // ===========================PRODUCTS=================================
 
 model Product {
+    id              Int                 @id @default(autoincrement())
+    state           Int
+    category        Category            @relation(fields: [ref_category], references: [id])
+    ref_category    Int
+    owner           User                @relation(fields: [ref_owner], references: [id])
+    ref_owner       Int
+    name            String
+    info            String
+    serial          Serial              @relation(fields: [ref_serial], references: [id])
+    ref_serial      Int
+    prod_to_request Prod_to_request[]
+    createdAt       DateTime            @default(now())
+    updatedAt       DateTime            @updatedAt
+}
+
+// ===========================ITEMS=================================
+
+model Item {
     id              Int             @id @default(autoincrement())
     state           Int
     category        Category        @relation(fields: [ref_category], references: [id])
@@ -121,7 +148,44 @@ model Product {
     info            String
     serial          Serial          @relation(fields: [ref_serial], references: [id])
     ref_serial      Int
-    prod_to_request Prod_to_request[]
+    provider        Provider[]
+    purchase        Purchase[]
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+}
+
+// ===========================PROVIDERS=================================
+
+model Provider {
+    id                  Int             @id @default(autoincrement())
+    name                String
+    legal_name          String
+    owner               User            @relation(fields: [ref_owner], references: [id])
+    ref_owner           Int
+    info                String
+    email               String          
+    identity            Int
+    cep                 String
+    uf                  String
+    address             String
+    city                String
+    phone               String
+    country             String
+    company_owner       String
+    company_owner_cpf   String
+    items               Item[]
+    purchase            Purchase[]
+    createdAt           DateTime        @default(now())
+    updatedAt           DateTime        @updatedAt
+}
+
+model Purchase {
+    id              Int             @id @default(autoincrement())
+    value           Float
+    quantity        Int
+    items           Item[]
+    user            User[]
+    provider        Provider[]
     createdAt       DateTime        @default(now())
     updatedAt       DateTime        @updatedAt
 }

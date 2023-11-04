@@ -12,10 +12,10 @@ import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import Button from '@mui/material/Button';
 
-import { Customer } from '@prisma/client'
+import { Purchase } from '@prisma/client'
 
 interface Column {
-  id: 'id' | 'name' | 'email' | 'identity' | 'info' | 'cep' | 'uf' | 'address' | 'city' | 'phone' | 'country'
+  id: 'id' | 'value'
   label: string
   minWidth?: number
   align?: 'right'
@@ -23,50 +23,33 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'name', label: 'Nome', minWidth: 130 },
-  { id: 'identity', label: 'Identidade', minWidth: 100 },
-  { id: 'email', label: 'E-mail', minWidth: 100 },
-  { id: 'phone', label: 'Telefone', minWidth: 120 },
-  { id: 'cep', label: 'Cep', minWidth: 120 },
-  { id: 'country', label: 'País', minWidth: 100 },
-  { id: 'uf', label: 'Uf', minWidth: 80 },
-  { id: 'city', label: 'Cidade', minWidth: 120 },
-  { id: 'address', label: 'Endereço', minWidth: 120 },
-  { id: 'info', label: 'Info', minWidth: 120 }
+  { id: 'value', label: 'Valor', minWidth: 100 }
 ]
 
 interface Data {
   id: number,
-  name: string,
-  email: string,
-  identity: string,
-  info: string,
-  cep: string,
-  uf: string,
-  address: string,
-  city: string,
-  phone: string,
-  country: string
+  itemQuantity: number,
+  value: number
 }
 
 type Props = {
-  customers: Customer[];
+  purchases: Purchase[];
 }
 
-function createData(id: number, name: string, email: string, identity: string, info: string, cep: string, uf: string, address: string, city: string, phone: string, country: string): Data {
-  return { id, name, email, identity, info, cep, uf, address, city, phone, country }
+function createData(id: number, value: number, itemQuantity: number): Data {
+  return { id, value, itemQuantity }
 }
 
-const CustomersTable: React.FC<Props> = (props) => {
+const PurchasesTable: React.FC<Props> = (props) => {
   // ** States
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
   const rows: Data[] = [];
 
-  if (props.customers) {
-    props.customers.forEach(customer => {
-      rows.push(createData(customer.id, customer.name, customer.email, customer.identity, customer.info, customer.cep, customer.uf, customer.address, customer.city, customer.phone, customer.country));
+  if (props.purchases) {
+    props.purchases.forEach(purchase => {
+      rows.push(createData(purchase.id, purchase.value, purchase.itemQuantity));
     });
   }
 
@@ -96,7 +79,7 @@ const CustomersTable: React.FC<Props> = (props) => {
           <TableBody>
             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
               return (
-                <TableRow hover role='checkbox' tabIndex={-1} key={row.identity}>
+                <TableRow hover role='checkbox' tabIndex={-1} key={row.id}>
                   {columns.map(column => {
                     const value = row[column.id]
 
@@ -107,7 +90,7 @@ const CustomersTable: React.FC<Props> = (props) => {
                     )
                   })}
                   <TableCell>
-                    <Button color='primary' variant='text' href={'/customers/' + row.id}>
+                    <Button color='primary' variant='text' href={'/purchases/' + row.id}>
                       Editar
                     </Button>
                   </TableCell>
@@ -130,4 +113,4 @@ const CustomersTable: React.FC<Props> = (props) => {
   )
 }
 
-export default CustomersTable
+export default PurchasesTable
