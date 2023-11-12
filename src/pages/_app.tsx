@@ -66,7 +66,7 @@ const App = (props: ExtendedAppProps) => {
 
   const [session, loading] = useSession();
 
-  if (!loading && !session) 
+  if (!loading && !session && router.pathname !== "/auth/login") 
   {
     router.push("/auth/login");
   }

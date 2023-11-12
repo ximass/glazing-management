@@ -19,6 +19,9 @@ import { styled, useTheme } from '@mui/material/styles'
 import MuiCard, { CardProps } from '@mui/material/Card'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertColor, AlertProps } from '@mui/material/Alert';
+import * as React from 'react';
 
 // ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline'
@@ -33,12 +36,8 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 
-
 import { getCsrfToken } from 'next-auth/client'
-
 import { signIn } from "next-auth/client"
-
-
 
 interface State {
   password: string
@@ -63,10 +62,17 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
   }
 }))
 
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 //@ts-ignore
 export async function getServerSideProps(context) {
   const csrfToken = await getCsrfToken(context);
-  
+
   return {
     props: {
       csrfToken: csrfToken == undefined ? null : csrfToken,
@@ -77,26 +83,34 @@ export async function getServerSideProps(context) {
 //@ts-ignore
 const LoginPage = (props) => {
 
+  const [open, setOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState('success' as AlertColor);
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const [username, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState({text:""});
-
+  const [message, setMessage] = useState({ text: "" });
 
   // ** Hook
   const theme = useTheme()
   const router = useRouter()
 
-
   const handleClickShowPassword = () => {
-    console.log(showPassword);
     setShowPassword(!showPassword);
   }
 
   const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
   }
-
 
   const onSubmit = async (e: SyntheticEvent) => {
 
@@ -105,31 +119,20 @@ const LoginPage = (props) => {
       username: username,
       password: password,
       redirect: false,
-       callbackUrl: "/"
+      callbackUrl: "/"
     })
 
-    if(result!.ok && result?.error != "User not found!"){
+    setOpen(true);
+
+    if (result!.ok && result?.error != "User not found!") {
+      setToastType('success');
+      setToastMessage('Login efetuado com sucesso!');
       router.push("/");
     }
-    else
-    {
-      //fazer algo aqui
+    else {
+      setToastType('error');
+      setToastMessage('As credenciais informadas estão incorretas!');
     }
-    
-    // try {
-    //   const body = { username, password };
-    //   const method = 'POST';
-
-    //   await fetch('/api/auth/signin/credentials', {
-    //     method: method,
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(body),
-    //   });
-      
-
-    // } catch (error) {
-    //   console.error(error);
-    // }
   }
 
   return (
@@ -215,21 +218,14 @@ const LoginPage = (props) => {
             </Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={onSubmit}>
-          <FormControl fullWidth>
-              <input name="csrfToken" type="hidden" defaultValue={props.csrfToken} />
-              <TextField
+            <input name="csrfToken" type="hidden" defaultValue={props.csrfToken} />
+            <FormControl fullWidth sx={{ marginBottom: 5 }}>
+              <InputLabel htmlFor='auth-login-password'>Usuário</InputLabel>
+              <OutlinedInput
+                label='Usuário'
                 id='auth-login-username'
                 onChange={(e) => setUser(e.target.value)}
-                label='Usuário'
               />
-              {/* <OutlinedInput
-                label='Usuário'
-                value=''
-                id='auth-login-username'
-                type='text'
-                onChange={(e) => setUser(e.target.value)}
-
-              /> */}
             </FormControl>
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-login-password'>Senha</InputLabel>
@@ -237,7 +233,7 @@ const LoginPage = (props) => {
                 label='Senha'
                 id='auth-login-password'
                 onChange={(e) => setPassword(e.target.value)}
-                type= {showPassword ? 'text' : 'password'}
+                type={showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
@@ -246,7 +242,7 @@ const LoginPage = (props) => {
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
-                    {showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                      {showPassword ? <EyeOutline /> : <EyeOffOutline />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -256,8 +252,10 @@ const LoginPage = (props) => {
               fullWidth
               size='large'
               variant='contained'
-              sx={{ marginBottom: 7,
-                    marginTop: 5 }}
+              sx={{
+                marginBottom: 7,
+                marginTop: 5
+              }}
               onClick={onSubmit}
             >
               Login
@@ -267,14 +265,17 @@ const LoginPage = (props) => {
                 Não possui usuário?
               </Typography>
               <Typography variant='body2'>
-                <Link passHref href='/pages/register'>
-                  <LinkStyled>Create an account</LinkStyled>
-                </Link>
+                Solicite a criação para um admin
               </Typography>
             </Box>
           </form>
         </CardContent>
       </Card>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={toastType} sx={{ width: '100%' }}>
+          {toastMessage}
+        </Alert>
+      </Snackbar>
       <FooterIllustrationsV1 />
     </Box>
   )
