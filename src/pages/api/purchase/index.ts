@@ -13,7 +13,7 @@ export default async function handle(req, res) {
         users: {
           connect: data.users
         },
-        value: data.value
+        value: Number(data.value)
       }
     });
 
@@ -29,7 +29,7 @@ export default async function handle(req, res) {
         users: {
           connect: data.users
         },
-        value: data.value
+        value: Number(data.value)
       }
     });
 

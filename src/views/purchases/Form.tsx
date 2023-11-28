@@ -19,14 +19,14 @@ import MenuItem from '@mui/material/MenuItem'
 import EmailOutline from 'mdi-material-ui/EmailOutline'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 
-import { Purchase, User, Customer, Item } from '@prisma/client'
+import { Purchase, User, Provider, Item } from '@prisma/client'
 
 type Props = {
   purchase: Purchase | undefined;
   users: User[];
   userNum: number[];
-  customers: Customer[];
-  customerNum: number[];
+  providers: Provider[];
+  providerNum: number[];
   items: Item[];
   itemNum: number[];
   itemQuantity: number;
@@ -35,15 +35,15 @@ type Props = {
 const PurchaseForm: React.FC<Props> = (props) => {
   const [id, setId] = useState(props.purchase ? props.purchase.id : null);
   const [value, setValue] = useState(props.purchase ? props.purchase.value : '');
-  const [itemQuantity, setQuantity] = useState(props.purchase ? props.purchase.itemQuantity : '');
+  // const [itemQuantity, setQuantity] = useState(props.purchase ? props.purchase.itemQuantity : '');
   const [userNum, setUser] = useState(props.purchase ? props.userNum.map(user => user.toString()) : []);
-  const [customerNum, setCustomer] = useState(props.purchase ? props.customerNum.map(customer => customer.toString()) : []);
+  const [providerNum, setProvider] = useState(props.purchase ? props.providerNum.map(provider => provider.toString()) : []);
 
   const handleSelectChangeUser = (event: SelectChangeEvent<string[]>) => {
     setUser(event.target.value as string[])
   }
-  const handleSelectChangeCustomer = (event: SelectChangeEvent<string[]>) => {
-    setCustomer(event.target.value as string[])
+  const handleSelectChangeProvider = (event: SelectChangeEvent<string[]>) => {
+    setProvider(event.target.value as string[])
   }
 
   const onSubmit = async (e: SyntheticEvent) => {
@@ -51,8 +51,8 @@ const PurchaseForm: React.FC<Props> = (props) => {
     
     try {
       const user = userNum.map(element => ({ id: parseInt(element) }));
-      const customer = customerNum.map(element => ({ id: parseInt(element) }));
-      const body = { id, customer, user, value, itemQuantity };
+      const provider = providerNum.map(element => ({ id: parseInt(element) }));
+      const body = { id, provider, user, value /*, itemQuantity */};
       const method = props.purchase ? 'PUT' : 'POST';
 
       await fetch('/api/purchase', {
@@ -78,17 +78,17 @@ const PurchaseForm: React.FC<Props> = (props) => {
                 <InputLabel id='form-layouts-separator-multiple-select-label'>Fornecedor</InputLabel>
                 <Select
                   multiple
-                  value={customerNum}
-                  onChange={handleSelectChangeCustomer}
+                  value={providerNum}
+                  onChange={handleSelectChangeProvider}
                   required={true}
                   id='form-layouts-separator-multiple-select'
                   labelId='form-layouts-separator-multiple-select-label'
-                  input={<OutlinedInput label='Cliente' id='customer' />}
+                  input={<OutlinedInput label='Compra de itens de fornecedores' id='provider' />}
                 >
                   {
-                    props.customers.map((customer) => (
-                      <MenuItem key={customer.id} value={customer.id}>
-                        {customer.name}
+                    props.providers.map((provider) => (
+                      <MenuItem key={provider.id} value={provider.id}>
+                        {provider.name}
                       </MenuItem>
                     ))
                   }
@@ -134,7 +134,7 @@ const PurchaseForm: React.FC<Props> = (props) => {
                 }}
               />
             </Grid>
-            <Grid item xs={4}>
+            {/* <Grid item xs={4}>
               <TextField
                 value={itemQuantity}
                 onChange={(e) => setQuantity(e.target.itemQuantity)}
@@ -150,7 +150,7 @@ const PurchaseForm: React.FC<Props> = (props) => {
                   )
                 }}
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
               <Button type='submit' variant='contained' size='large'>
                 Salvar

@@ -160,11 +160,9 @@ model Provider {
     id                  Int             @id @default(autoincrement())
     name                String
     legal_name          String
-    owner               User            @relation(fields: [ref_owner], references: [id])
-    ref_owner           Int
     info                String
     email               String          
-    identity            Int
+    identity            String
     cep                 String
     uf                  String
     address             String
@@ -174,18 +172,17 @@ model Provider {
     company_owner       String
     company_owner_cpf   String
     items               Item[]
-    purchase            Purchase[]
+    purchases           Purchase[]
     createdAt           DateTime        @default(now())
     updatedAt           DateTime        @updatedAt
 }
 
 model Purchase {
     id              Int             @id @default(autoincrement())
-    value           Float
-    quantity        Int
-    items           Item[]
+    provider        Provider[]      
     user            User[]
-    provider        Provider[]
+    value           Float
+    items           Item[]
     createdAt       DateTime        @default(now())
     updatedAt       DateTime        @updatedAt
 }

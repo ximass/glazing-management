@@ -18,7 +18,7 @@ type ThemeConfig = {
 const themeConfig: ThemeConfig = {
   // ** Layout Configs
   templateName: 'Glazing Management' /* App Name */,
-  mode: 'light' /* light | dark */,
+  mode: 'dark' /* light | dark */,
   contentWidth: 'full' /* full | boxed */,
 
   // ** Routing Configs

@@ -20,7 +20,7 @@ export default async function handle(req, res) {
                   users: {
                     connect: parametros.users
                   },
-                  value: parametros.value
+                  value: Number(parametros.value)
             }
         });
 

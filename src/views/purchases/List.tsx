@@ -28,7 +28,7 @@ const columns: readonly Column[] = [
 
 interface Data {
   id: number,
-  itemQuantity: number,
+  quantity: number,
   value: number
 }
 
@@ -36,8 +36,8 @@ type Props = {
   purchases: Purchase[];
 }
 
-function createData(id: number, value: number, itemQuantity: number): Data {
-  return { id, value, itemQuantity }
+function createData(id: number, value: number, quantity: number ): Data {
+  return { id, value, quantity }
 }
 
 const PurchasesTable: React.FC<Props> = (props) => {
@@ -49,7 +49,7 @@ const PurchasesTable: React.FC<Props> = (props) => {
 
   if (props.purchases) {
     props.purchases.forEach(purchase => {
-      rows.push(createData(purchase.id, purchase.value, purchase.itemQuantity));
+      rows.push(createData(purchase.id, purchase.value, purchase.quantity ));
     });
   }
 
