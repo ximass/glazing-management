@@ -55,18 +55,16 @@ const ItemTypeForm: React.FC<Props> = (props) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({id: itemFieldValue.id})
     }).then((response) => response.json()).then((itemFieldValue) => {
-      setItemFieldsValues(itemFieldsValues.filter(object => object.id !== itemFieldValue.id));
+      
+      fetch('/api/itemField/' + itemField.id, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({id: itemField.id})
+      }).then((response) => response.json()).then((itemField) => {
+        setItemFields(itemFields.filter(object => object.id !== itemField.id));
+        setItemFieldsValues(itemFieldsValues.filter(object => object.id !== itemFieldValue.id));
+      });
     });
-
-
-    fetch('/api/itemField/' + itemField.id, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({id: itemField.id})
-    }).then((response) => response.json()).then((itemField) => {
-      setItemFields(itemFields.filter(object => object.id !== itemField.id));
-    });
-
   }
 
   const addField = async (e: SyntheticEvent) => {
@@ -84,8 +82,7 @@ const ItemTypeForm: React.FC<Props> = (props) => {
     }).then((response) =>
       response.json()
     ).then((itemField) => {
-      setItemFields([...itemFields, itemField]);
-
+      
       const newItemFieldValue = {
         value: '',
         ref_item_field: itemField.id
@@ -97,6 +94,7 @@ const ItemTypeForm: React.FC<Props> = (props) => {
         body: JSON.stringify(newItemFieldValue),
       }).then((response) => response.json()).then((itemFieldValue) => {
         setItemFieldsValues([...itemFieldsValues, itemFieldValue]);
+        setItemFields([...itemFields, itemField]);
       });
     });
   }
