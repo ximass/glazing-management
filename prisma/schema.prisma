@@ -69,7 +69,6 @@ model Serial {
     ref_module  Int?
     products    Product[]
     items       Item[]
-    itemsType   ItemType[]
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
 }
@@ -147,7 +146,7 @@ model Item {
     providers             Provider[]
     purchases             Purchase[]
     stock                 ItemStock?
-    state                 Int             @default(1)
+    active                Boolean         @default(true)
     createdAt             DateTime        @default(now())
     updatedAt             DateTime        @updatedAt
 }
@@ -156,13 +155,11 @@ model ItemType {
     id                    Int             @id @default(autoincrement())
     ref_category          Int
     category              Category        @relation(fields: [ref_category], references: [id])
-    serial                Serial          @relation(fields: [ref_serial], references: [id])
-    ref_serial            Int
     name                  String
     info                  String
     items                 Item[]
     itemFields            ItemField[]
-    state                 Int             @default(1)
+    active                Boolean         @default(true)
     createdAt             DateTime        @default(now())
     updatedAt             DateTime        @updatedAt
 }
