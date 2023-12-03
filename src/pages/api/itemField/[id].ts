@@ -4,8 +4,6 @@ import prisma from '../../../../lib/prisma';
 export default async function handle(req, res) {
     const parametros = req.query;
 
-    console.log(parametros);
-
     if (req.method === 'DELETE') {
         const result = await prisma.itemField.delete({
             where: { id: Number(parametros.id) }
