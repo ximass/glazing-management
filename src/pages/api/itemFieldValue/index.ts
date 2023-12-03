@@ -16,7 +16,7 @@ export default async function handle(req, res) {
   }
   else if (req.method === 'PUT') {
     const itemFieldValue = await prisma.itemFieldValue.update({
-      where: { id: data.id },
+      where: { id: Number(data.id) },
       data: {
         value: data.value,
         ref_item_field: data.ref_item_field

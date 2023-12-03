@@ -53,13 +53,13 @@ const ItemTypeForm: React.FC<Props> = (props) => {
     fetch('/api/itemFieldValue/' + itemFieldValue.id, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({id: itemFieldValue.id})
+      body: JSON.stringify({ id: itemFieldValue.id })
     }).then((response) => response.json()).then((itemFieldValue) => {
-      
+
       fetch('/api/itemField/' + itemField.id, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({id: itemField.id})
+        body: JSON.stringify({ id: itemField.id })
       }).then((response) => response.json()).then((itemField) => {
         setItemFields(itemFields.filter(object => object.id !== itemField.id));
         setItemFieldsValues(itemFieldsValues.filter(object => object.id !== itemFieldValue.id));
@@ -82,7 +82,7 @@ const ItemTypeForm: React.FC<Props> = (props) => {
     }).then((response) =>
       response.json()
     ).then((itemField) => {
-      
+
       const newItemFieldValue = {
         value: '',
         ref_item_field: itemField.id
@@ -107,17 +107,45 @@ const ItemTypeForm: React.FC<Props> = (props) => {
     setActive(event.target.value as boolean);
   }
 
+  const onChangeField = (value: string, itemField: ItemField) => {
+    indexedFields[itemField.id].label = value;
+
+    setItemFields(Object.values(indexedFields));
+  }
+
+  const onChangeFieldValue = (value: string, itemFieldValue: ItemFieldValue) => {
+    indexedFieldsValues[itemFieldValue.ref_item_field].value = value;
+
+    setItemFieldsValues(Object.values(indexedFieldsValues));
+  }
+
   const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
     try {
-      const body = { id, name, info, active, ref_category: itemTypeCategory };
+      const body = { id, name, info, active, ref_category: itemTypeCategory};
       const method = props.itemType ? 'PUT' : 'POST';
 
       await fetch('/api/itemType', {
         method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
+      });
+
+      itemFields.forEach(async (itemField) => {
+        await fetch('/api/itemField', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: itemField.id, label: itemField.label, ref_item_type: itemField.ref_item_type }),
+        });
+      });
+
+      itemFieldsValues.forEach(async (itemFieldValue) => {
+        await fetch('/api/itemFieldValue', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: itemFieldValue.id, value: itemFieldValue.value, ref_item_field: itemFieldValue.ref_item_field }),
+        });
       });
 
       await Router.push('/itemTypes');
@@ -206,7 +234,7 @@ const ItemTypeForm: React.FC<Props> = (props) => {
                     <TextField
                       key={itemField.id}
                       value={indexedFields[String(itemField.id)].label}
-                      onChange={(e) => setInfo(e.target.value)}
+                      onChange={(e) => onChangeField(e.target.value, itemField)}
                       required={false}
                       fullWidth
                       label='Campo'
@@ -215,9 +243,9 @@ const ItemTypeForm: React.FC<Props> = (props) => {
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
-                      key={indexedFieldsValues[String(itemField.id)].value}
+                      key={itemField.id}
                       value={indexedFieldsValues[String(itemField.id)].value}
-                      onChange={(e) => setInfo(e.target.value)}
+                      onChange={(e) => onChangeFieldValue(e.target.value, indexedFieldsValues[String(itemField.id)])}
                       required={false}
                       fullWidth
                       label='Valor'

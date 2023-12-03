@@ -13,7 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { GetServerSideProps } from 'next/types';
 
 import prisma from 'lib/prisma';
-import { Category } from '@prisma/client';
+import { Category, ItemField, ItemFieldValue, ItemType } from '@prisma/client';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const categories = await prisma.category.findMany();
@@ -28,6 +28,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 type Props = {
   itemType: undefined;
+  itemFields: ItemField[];
+  itemFieldsValues: ItemFieldValue[];
   categories: Category[];
   itemTypeCategory: number | undefined;
 }
@@ -37,7 +39,7 @@ const FormLayouts: React.FC<Props> = (props) => {
     <DatePickerWrapper>
       <Grid container >
         <Grid item xs={12}>
-          <ItemTypeForm itemType={props.itemType} categories={props.categories} itemTypeCategory={props.itemTypeCategory}/>
+          <ItemTypeForm itemType={props.itemType} itemFields={props.itemFields} itemFieldsValues={props.itemFieldsValues} categories={props.categories} itemTypeCategory={props.itemTypeCategory}/>
         </Grid>
       </Grid>
     </DatePickerWrapper>
