@@ -50,6 +50,12 @@ const navigation = (): VerticalNavItemsType => {
       openInNewTab: false
     },
     {
+      title: 'Tipos de itens',
+      icon: Cart,
+      path: '/itemTypes',
+      openInNewTab: false
+    },
+    {
       sectionTitle: 'Configurações'
     },
     {

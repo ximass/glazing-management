@@ -21,6 +21,8 @@ model User {
     groups      Group[]
     requests    Request[]
     products    Product[]
+    providers   Provider[]
+    purchases   Purchase[]
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
 }
@@ -52,7 +54,8 @@ model Category {
     serial      Serial          @relation(fields: [ref_serial], references: [id])
     ref_serial  Int
     active      Boolean         @default(true)
-    product     Product[]
+    products    Product[]
+    itemTypes   ItemType[]
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
 }
@@ -64,7 +67,8 @@ model Serial {
     pattern     String
     categories  Category[]
     ref_module  Int?
-    product     Product[]
+    products    Product[]
+    items       Item[]
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
 }
@@ -90,8 +94,8 @@ model Customer {
 
 model Request {
     id              Int             @id @default(autoincrement())
-    customers        Customer[]
-    users            User[]
+    customers       Customer[]
+    users           User[]
     value           Float
     prod_to_request Prod_to_request[]
     dt_request      DateTime        @default(now())
@@ -100,8 +104,8 @@ model Request {
 
 model Prod_to_request {
     id             Int            @id @default(autoincrement())
-    requests        Request        @relation(fields: [ref_request], references: [id])
-    products        Product        @relation(fields: [ref_product], references: [id])
+    request        Request        @relation(fields: [ref_request], references: [id])
+    product        Product        @relation(fields: [ref_product], references: [id])
     ref_request    Int
     ref_product    Int
     value          Float
@@ -111,17 +115,124 @@ model Prod_to_request {
 // ===========================PRODUCTS=================================
 
 model Product {
+    id                   Int             @id @default(autoincrement())
+    state                Int
+    category             Category        @relation(fields: [ref_category], references: [id])
+    ref_category         Int
+    owner                User            @relation(fields: [ref_owner], references: [id])
+    ref_owner            Int
+    name                 String
+    info                 String
+    serial               Serial          @relation(fields: [ref_serial], references: [id])
+    ref_serial           Int
+    prod_to_request      Prod_to_request[]
+    items_to_product     Item_to_product[]
+    createdAt            DateTime        @default(now())
+    updatedAt            DateTime        @updatedAt
+}
+
+// ==========================ITEMS======================================
+
+model Item {
+    id                    Int             @id @default(autoincrement())
+    type                  ItemType        @relation(fields: [ref_type], references: [id])
+    ref_type              Int
+    serial                Serial          @relation(fields: [ref_serial], references: [id])
+    ref_serial            Int
+    name                  String
+    info                  String
+    value                 Decimal
+    items_to_product      Item_to_product[]
+    providers             Provider[]
+    purchases             Purchase[]
+    stock                 ItemStock?
+    active                Boolean         @default(true)
+    createdAt             DateTime        @default(now())
+    updatedAt             DateTime        @updatedAt
+}
+
+model ItemType {
+    id                    Int             @id @default(autoincrement())
+    ref_category          Int
+    category              Category        @relation(fields: [ref_category], references: [id])
+    name                  String
+    info                  String
+    items                 Item[]
+    itemFields            ItemField[]
+    active                Boolean         @default(true)
+    createdAt             DateTime        @default(now())
+    updatedAt             DateTime        @updatedAt
+}
+
+model ItemField {
+    id                    Int             @id @default(autoincrement())
+    ref_item_type         Int
+    itemType              ItemType        @relation(fields: [ref_item_type], references: [id])
+    label                 String
+    ItemFieldValue        ItemFieldValue?
+    createdAt             DateTime        @default(now())
+    updatedAt             DateTime        @updatedAt
+}
+
+model ItemFieldValue {
+    id                    Int             @id @default(autoincrement())
+    ref_item_field        Int             @unique
+    itemField             ItemField       @relation(fields: [ref_item_field], references: [id])
+    value                 String
+    createdAt             DateTime        @default(now())
+    updatedAt             DateTime        @updatedAt
+}
+
+model Item_to_product {
+    id             Int            @id @default(autoincrement())
+    ref_item       Int
+    item           Item           @relation(fields: [ref_item], references: [id])
+    ref_product    Int
+    product        Product        @relation(fields: [ref_product], references: [id])
+    quantity       Int
+}
+
+model ItemStock {
+    id                    Int             @id @default(autoincrement())
+    ref_item              Int             @unique
+    item                  Item            @relation(fields: [ref_item], references: [id])
+    quantity              Int
+    critical_quantity     Int
+}
+
+// ===========================PROVIDERS=================================
+
+model Provider {
+    id                  Int             @id @default(autoincrement())
+    name                String
+    legal_name          String
+    owner               User            @relation(fields: [ref_owner], references: [id])
+    ref_owner           Int
+    info                String
+    email               String          
+    identity            Int
+    cep                 String
+    uf                  String
+    address             String
+    city                String
+    phone               String
+    country             String
+    company_owner       String
+    company_owner_cpf   String
+    items               Item[]
+    purchases           Purchase[]
+    createdAt           DateTime        @default(now())
+    updatedAt           DateTime        @updatedAt
+}
+
+model Purchase {
     id              Int             @id @default(autoincrement())
-    state           Int
-    category        Category        @relation(fields: [ref_category], references: [id])
-    ref_category    Int
-    owner           User            @relation(fields: [ref_owner], references: [id])
-    ref_owner       Int
-    name            String
-    info            String
-    serial          Serial          @relation(fields: [ref_serial], references: [id])
-    ref_serial      Int
-    prod_to_request Prod_to_request[]
+    ref_user        Int
+    user            User            @relation(fields: [ref_user], references: [id])
+    value           Float
+    quantity        Int
+    items           Item[]
+    providers       Provider[]
     createdAt       DateTime        @default(now())
     updatedAt       DateTime        @updatedAt
 }
