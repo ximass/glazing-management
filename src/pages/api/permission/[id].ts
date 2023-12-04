@@ -6,7 +6,7 @@ export default async function handle(req, res) {
 
     if (req.method === 'DELETE') {
         const permission = await prisma.permission.delete({
-            where: { id: parametros.id }
+            where: { id: Number(parametros.id) }
         });
 
         res.json(permission);

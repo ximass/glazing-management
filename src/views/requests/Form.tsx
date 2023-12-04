@@ -63,6 +63,36 @@ const RequestForm: React.FC<Props> = (props) => {
     }
   }
 
+  const onDelete = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    try {
+      const body = { id };
+
+      await fetch('/api/request/'+id, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      await Router.push('/requests');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const onReturn = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    try {
+      await Router.push('/requests');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  
+
   return (
     <Card>
       <CardHeader title='Cliente' titleTypographyProps={{ variant: 'h6' }} />
@@ -133,6 +163,16 @@ const RequestForm: React.FC<Props> = (props) => {
             <Grid item xs={12}>
               <Button type='submit' variant='contained' size='large'>
                 Salvar
+              </Button>
+              {
+                id && (
+                <Button sx={{marginLeft: 5}} color='error'  type='button' onClick={onDelete} variant='contained' size='large'>
+                Excluir
+                </Button> 
+                )            
+              }
+              <Button sx={{marginLeft: 5}} color='secondary'  type='button' onClick={onReturn} variant='contained' size='large'>
+                Voltar
               </Button>
             </Grid>
           </Grid>

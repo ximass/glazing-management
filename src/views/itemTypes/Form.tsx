@@ -154,6 +154,34 @@ const ItemTypeForm: React.FC<Props> = (props) => {
     }
   }
 
+  const onDelete = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    try {
+      const body = { id };
+
+      await fetch('/api/itemType/'+id, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      await Router.push('/itemTypes');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const onReturn = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    try {
+      await Router.push('/itemTypes');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <Card>
       <CardHeader title='Tipos de itens' titleTypographyProps={{ variant: 'h6' }} />
@@ -272,6 +300,16 @@ const ItemTypeForm: React.FC<Props> = (props) => {
                 Salvar
               </Button>
             </Grid>
+            {
+              id && (
+              <Button sx={{marginLeft: 5}} color='error'  type='button' onClick={onDelete} variant='contained' size='large'>
+              Excluir
+              </Button> 
+              )            
+            }
+            <Button sx={{marginLeft: 5}} color='secondary'  type='button' onClick={onReturn} variant='contained' size='large'>
+              Voltar
+            </Button>
           </Grid>
         </form>
       </CardContent>
