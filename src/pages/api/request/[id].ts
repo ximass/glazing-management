@@ -6,7 +6,7 @@ export default async function handle(req, res) {
 
     if (req.method === 'DELETE') {
         const request = await prisma.request.delete({
-            where: { id: parametros.id }
+            where: { id: Number(parametros.id) }
         });
 
         res.json(request);

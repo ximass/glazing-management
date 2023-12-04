@@ -1,9 +1,11 @@
 // ** Next Imports
 import Head from 'next/head'
+import { useState, SyntheticEvent, Fragment } from 'react'
 import { Router, useRouter } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { useSession, getSession } from "next-auth/client"
+
 
 //import { SessionProvider } from "next-auth/react"
 
@@ -56,20 +58,64 @@ if (themeConfig.routingLoader) {
   })
 }
 
-
-
 // ** Configure JSS & ClassName
 const App = (props: ExtendedAppProps) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
   const router = useRouter();
 
-  const [session, loading] = useSession();
+  const session = getSession();
 
-  if (!loading && !session && router.pathname !== "/auth/login") 
-  {
-    router.push("/auth/login");
-  }
+  session.then(response => {
+    if(!response?.accessToken && router.pathname !== "/auth/login")
+    {
+      router.push("/auth/login");
+    }
+    else if(router.pathname == "/categories")
+    {
+      /*
+      Validar se o usuário tem acesso a essa rota aqui
+      */
+    }
+    else if(router.pathname == "/serials")
+    {
+      /*
+      Validar se o usuário tem acesso a essa rota aqui
+      */
+    }
+    else if(router.pathname == "/requests")
+    {
+      /*
+      Validar se o usuário tem acesso a essa rota aqui
+      */
+    }
+    else if(router.pathname == "/customers")
+    {
+      /*
+      Validar se o usuário tem acesso a essa rota aqui
+      */
+    }
+    else if(router.pathname == "/permissions")
+    {
+      /*
+      Validar se o usuário tem acesso a essa rota aqui
+      */
+    }
+    else if(router.pathname == "/groups")
+    {
+      /*
+      Validar se o usuário tem acesso a essa rota aqui
+      */
+    }
+    else if(router.pathname == "/users")
+    {
+      /*
+      Validar se o usuário tem acesso a essa rota aqui
+      */
+    }
+  });
+
+
 
   // Variables
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)

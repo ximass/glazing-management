@@ -6,7 +6,7 @@ export default async function handle(req, res) {
 
     if (req.method === 'DELETE') {
         const group = await prisma.group.delete({
-            where: { id: parametros.id }
+            where: { id: Number(parametros.id) }
         });
 
         res.json(group);

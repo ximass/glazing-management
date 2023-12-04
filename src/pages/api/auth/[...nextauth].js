@@ -28,7 +28,6 @@ jwt: {secret: process.env.JWT_SIGNIN_PRIVATE_KEY, maxAge: 60 * 60 * 24},
           }
         });
 
-
         const user = result;
 
         if (user) {
